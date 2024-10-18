@@ -1,6 +1,6 @@
 {
-  "remoteServiceBaseUrl": "https://10.10.13.4:5443",
-  "appBaseUrl": "https://10.10.13.4:6443",
+  "remoteServiceBaseUrl": "https://sandbox-api-doisoat.gmobile.vn",
+  "appBaseUrl": "https://sandbox-doisoat.gmobile.vn",
   "localeMappings": {
     "angular": [
       {
