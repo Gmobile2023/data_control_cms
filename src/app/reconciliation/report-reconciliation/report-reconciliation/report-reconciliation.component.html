@@ -1,0 +1,268 @@
+<div [@routerTransition] id="mydiv">
+    <sub-header [title]="'Báo cáo' | localize"
+        [description]="'Danh sách báo cáo đối soát' | localize">
+    </sub-header>
+    <div>
+        <div class="card card-custom">
+            <div class="card-body">
+                <div>
+                    <div class="row align-items-center mb-5">
+                        <div class="col-md-12 col-xl-12 col-sm-12">
+                            <div class="m-form__group align-items-center">
+                                <div class="col-md-12 col-xl-12 col-sm-12">
+                                    <div class>
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <input name="filterText"
+                                                    autoFocus
+                                                    class="form-control m-input"
+                                                    placeholder="Mã đối soát"
+                                                    type="text"
+                                                    [(ngModel)]="filter.reconcileCode" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input name="filterText"
+                                                    autoFocus
+                                                    class="form-control m-input"
+                                                    placeholder="Tên dịch vụ"
+                                                    type="text"
+                                                    [(ngModel)]="filter.serviceName" />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <p-dropdown
+                                                        #yourDropdown
+                                                        [options]="suppliers"
+                                                        [(ngModel)]="filter.supplierId"
+                                                        [filter]="true"
+                                                        optionLabel="supplierName"
+                                                        optionValue="supplierId"
+                                                        placeholder="Chọn nhà cung cấp"
+                                                        showClear="true"
+                                                        name="supplierId"
+                                                        [style]="{'width':'100%'}">
+                                                    </p-dropdown>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <select id="FileCode"
+                                                    placeholder="Trạng thái"
+                                                    [(ngModel)]="filter.status"
+                                                    class="form-control"
+                                                    type="text" name="FileCode"
+                                                    required
+                                                    maxlength="64">
+                                                    <option value>Trạng
+                                                        thái</option>
+                                                    <option value="Khớp">Khớp</option>
+                                                    <option value="Không khớp">Không
+                                                        khớp</option>
+                                                    <option value="Lỗi">Lỗi</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <div class="row" *ngIf="'Pages.Administration.ReportSupplier.ListFileInter' | permission">
+                                                    <a href="#"
+                                                        (click)="showModalFile()">File
+                                                        báo cáo tổng hợp</a>
+                                                </div>
+                                                <div class="row" *ngIf="'Pages.Administration.ReportSupplier.ListFileSupplier' | permission">
+                                                    <a href="#"
+                                                        (click)="showMdalFileSupplier()">File
+                                                        đối soát NCC</a>
+                                                </div>
+                                                <div class="row" *ngIf="'Pages.Administration.ReportSupplier.ListFileAgency' | permission">
+                                                    <a href="#"
+                                                        (click)="showMdalFileAgency()">File
+                                                        đối soát đại lý</a>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="row mt-5">
+                                            <form [formGroup]="dateForm">
+                                                <div class="row">
+                                                    <div class="col-md-5">
+                                                        <div class="row">
+                                                            <div
+                                                                class="col-md-3">
+                                                                <label
+                                                                    for="date"
+                                                                    style="align-items: center;display: flex;height: 100%;">Từ
+                                                                    ngày</label>
+                                                            </div>
+                                                            <!-- <div class="col-md-9">
+                                                                <p-calendar
+                                                                    [showIcon]="true"
+                                                                    [(ngModel)]="filter.creationFrom"></p-calendar>
+                                                            </div> -->
+                                                            <div
+                                                                class="col-md-9">
+                                                                <p-calendar
+                                                                    [showIcon]="true"
+                                                                    [(ngModel)]="filter.creationFrom"
+                                                                    formControlName="creationFrom"></p-calendar>
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <div class="row">
+                                                            <div
+                                                                class="col-md-3">
+                                                                <label
+                                                                    for="date"
+                                                                    style="align-items: center;display: flex;height: 100%;">Đến
+                                                                    ngày</label>
+                                                            </div>
+                                                            <!-- <div class="col-md-9">
+                                                                <p-calendar
+                                                                    [showIcon]="true"
+                                                                    [(ngModel)]="filter.creationTo"></p-calendar>
+                                                            </div> -->
+                                                            <div
+                                                                class="col-md-9">
+                                                                <p-calendar
+                                                                    [showIcon]="true"
+                                                                    [(ngModel)]="filter.creationTo"
+                                                                    formControlName="creationTo"></p-calendar>
+                                                            </div>
+
+                                                        </div>
+                                                        <div
+                                                            *ngIf="dateForm.get('creationTo').hasError('required')">
+                                                            <p>Đến ngày là
+                                                                trường bắt buộc</p>
+                                                        </div>
+                                                        <div class="text-center"
+                                                            *ngIf="dateForm.get('creationTo').hasError('dateRange')">
+                                                            <p
+                                                                style="font-style: italic; color: rgb(224, 107, 107)">Đến
+                                                                ngày phải lớn
+                                                                hơn hoặc bằng Từ
+                                                                ngày</p>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                        <button class="btn btn-primary"
+                                                            type="button"
+                                                            (click)="getReportReconciles()">
+                                                            <i class="flaticon-search-1"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-xl-12 col-sm-12 mt-5">
+                            <div class="m-form__group align-items-center">
+                                <div class="col-md-12 col-xl-12 col-sm-12">
+                                    <div class>
+                                        <div class="row">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row align-items-center">
+                    <div class="primeng-datatable-container">
+                        <p-table [value]="lstObj"
+                            [tableStyle]="{ 'min-width': '50rem' }">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Mã đối soát</th>
+                                    <th>Ngày giờ tạo</th>
+                                    <th>Tên dịch vụ</th>
+                                    <th>Loại dịch vụ</th>
+                                    <th>Nhà cung cấp</th>
+                                    <th>Tổng số bản ghi</th>
+                                    <th>Số bản ghi lệch</th>
+                                    <th>Trạng thái</th>
+                                    <th>Hành động</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-listItem
+                                let-rowIndex="rowIndex">
+                                <tr>
+                                    <td>{{rowIndex + 1}}</td>
+                                    <td>{{listItem.reconcilCode}}</td>
+                                    <td>{{listItem.creationTime | date:'dd/MM/yyy h:mm'}}</td>
+                                    <td>{{listItem.serviceName}}</td>
+                                    <td>{{listItem.serviceTypeName}}</td>
+                                    <td>{{listItem.supplierName}}</td>
+                                    <td>{{listItem.totalRecord}}</td>
+                                    <td>{{listItem.totalRecordFail}}</td>
+                                    <td>{{listItem.result}}</td>
+                                    <td><button
+                                            (click)="navigateDetail(listItem.id)"
+                                            *ngIf="listItem.result == 'Không khớp'"
+                                            class="btn btn-primary">Xem chi tiết</button>
+                                        <div>
+                                            <button
+                                                (click)="showDialog(listItem.message, listItem.id, listItem.isReReconcile)"
+                                                *ngIf="listItem.result == 'Lỗi'"
+                                                class="btn btn-primary">
+                                                Xem lỗi
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <div class="primeng-no-data text-center mt-2"
+                            *ngIf="paginator.total == 0">
+                            {{ 'NoData' | localize }}
+                        </div>
+                        <div class="mt-3" *ngIf="paginator.total > 0">
+                            <p-paginator (onPageChange)="onPageChange($event)"
+                                [rows]="paginator.pageSize"
+                                [totalRecords]="paginator.total"
+                                [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+                        </div>
+                    </div>
+                    <modal-list-file (downloadFile)="downloadFile($event)" #modalListFile></modal-list-file>
+                    <modal-file-reconcile-supplier (downloadFile)="downloadFile($event)" #modalFileSupplier></modal-file-reconcile-supplier>
+                    <modal-file-reconcile-agency (downloadFile)="downloadFile($event)" #modalFileAgency></modal-file-reconcile-agency>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-dialog
+    [(visible)]="showDialogError"
+    [draggable]="false" [resizable]="false"
+    [style]="{width: '50%', 'margin': 'auto'}">
+    <div class="custom-content">
+        <h1 class="text-center">Nguyên nhân lỗi</h1>
+        <div class="text-danger" [innerHtml]="messageError">
+        </div>
+        <p class="font-weight-bold">
+            Thực hiện cập nhật file dữ liệu để thực hiện lại đối soát. Chọn
+            "Đối soát lại" sau khi đã tải lại file
+        </p>
+        <!-- <p>
+            Tên file dữ liệu cần tải lại:
+        </p> -->
+        <div style="text-align: right;">
+            <!-- <button class="btn btn-outline-secondary"
+                (click)="closeDialog(listItem)">Thoát</button> -->
+            <button
+                [buttonBusy]="reReconciling"
+                *ngIf="!isReReconcile && ('Pages.Administration.ReportSupplier.Reconcile' | permission)"
+                class="btn btn-primary"
+                (click)="reReconcile()">Đối soát lại</button>
+        </div>
+    </div>
+</p-dialog>

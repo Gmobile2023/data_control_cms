@@ -1,0 +1,176 @@
+<div [@routerTransition]>
+    <sub-header
+        [title]="'Chi tiết đối soát' | localize"
+        style="margin-right: 10px;"></sub-header>
+
+    <div [class]="containerClass">
+        <div class="card card-custom">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        MĐS : {{report.reconcileCode}}
+                    </div>
+                    <div class="col-md-3">
+                        {{report.serviceName}}
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-3">
+                        {{report.creationTimeReport | date:'dd/MM/yyy h:mm'}}
+                    </div>
+                    <div class="col-md-3">
+                        <strong style="color: red;">{{report.result}}</strong>
+                    </div>
+
+                    <div class="col-md-3"
+                        *ngIf="'Pages.Administration.ReportSupplier.ViewHistory' | permission">
+                        <button (click)="getListMatchingLogs()"
+                            class="btn btn-primary">Lịch sử thay đổi</button>
+                    </div>
+                    <div class="col-md-2"
+                        *ngIf="'Pages.Administration.ReportSupplier.ReSendReport' | permission">
+                        <button (click)="reSendReport()"
+                            [buttonBusy]="reSending" class="btn btn-primary">Gửi
+                            lại báo cáo</button>
+                    </div>
+                </div>
+                <h4 class="mt-4">Danh sách giao dịch không khớp</h4>
+                <div class="row mt-3">
+                    <!-- <div class="col-md-3">
+                        {{report.creationTimeReport | date:'dd/MM/yyy h:mm'}}
+                    </div> -->
+                    <div class="col-md-8">
+                        Số bản ghi lệch: {{report.listData.length}}
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-3"
+                        *ngIf="'Pages.Administration.ReportSupplier.MatchData' | permission">
+                        <button class="btn btn-primary" [buttonBusy]="matching"
+                            name="buttonMath"
+                            [disabled]="validMatching === false"
+                            (click)="showDialogNoteMathFunc(1)">Khớp dữ liệu</button>
+                    </div>
+                    <div class="col-md-3"
+                        *ngIf="'Pages.Administration.ReportSupplier.MatchData' | permission">
+                        <button class="btn btn-primary" [buttonBusy]="matching"
+                            [disabled]="!tickList || tickList.length <= 0"
+                            name="buttonTicket"
+                            (click)="showDialogNoteMathFunc(2)">Đánh dấu khớp</button>
+                    </div>
+                </div>
+                <div class="row mt-4 scroll-container"
+                    style="overflow-y: auto; max-height: 350px;">
+                    <div class="col-md-6">
+                        <h5>Danh sách giao dịch nội bộ</h5>
+                        <p-table
+                            [columns]="report.template"
+                            [scrollable]="true"
+                            [value]="report.listData"
+                            [tableStyle]="{ 'min-width': '50rem' }">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th></th>
+                                    <th *ngFor="let col of columns">
+                                        {{ col.fieldNameTemplateBatchFile }}
+
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData
+                                let-columns="columns">
+                                <tr>
+                                    <td><input class="form-check-input"
+                                            type="checkbox"
+                                            (click)="checkData(rowData.id,'internal')"
+                                            ></td>
+                                    <td
+                                        *ngFor="let col of columns; let i = index">
+                                        <div
+                                            [ngStyle]="{'background-color': rowData.columnFail && rowData.columnFail.includes(col.fieldNameTemplateBatchFile) ? 'yellow' : 'white'}">
+                                            {{
+                                            searchByKey(rowData.recordInternal,
+                                            col.fieldNameTemplateBatchFile) }}
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Danh sách giao dịch nhà cung cấp :
+                            {{report.supplierName}}</h5>
+                        <!-- <div class="row">
+                                <div class="col-md-3">
+                                    {{report.creationTimeReport | date:'dd/MM/yyy h:mm'}}
+                                </div>
+                                <div class="col-md-9">
+                                    Số bản ghi lệch: {{report.listData.length}}
+                                </div>
+                            </div> -->
+                        <p-table
+                            [columns]="this.report.template"
+                            [scrollable]="true"
+                            [value]="report.listData"
+                            [tableStyle]="{ 'min-width': '50rem' }">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th></th>
+                                    <th *ngFor="let col of columns;">
+                                        {{ col.fieldNameTemplateSupplier }}
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData
+                                let-columns="columns">
+                                <tr>
+                                    <td>
+                                        <input class="form-check-input"
+                                            type="checkbox"
+                                            (click)="checkData(rowData.id, 'supplier')"
+                                            >
+                                    </td>
+                                    <td *ngFor="let col of columns;">
+                                        {{ searchByKey(rowData.recordSupplier,
+                                        col.fieldNameTemplateSupplier) }}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <matching-logs #matchingLogsModal></matching-logs>
+                </div>
+                <div class="mt-3">
+                    <button
+                        [routerLink]="['/app/reconciliation/report-reconciliation']"
+                        type="button"
+                        class="btn btn-primary fw-bold">
+                        <span>{{ 'Trở lại' | localize }}</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-dialog
+    header="Ghi chú"
+    [(visible)]="showDialogNoteMath"
+    [draggable]="false" [resizable]="false"
+    [style]="{width: '50%', 'margin': 'auto'}">
+    <div class="custom-content">
+        <textarea placeholder="Nhập ghi chú" [(ngModel)]="noteMathData"
+            rows="4"
+            class="form-control">
+        </textarea>
+       
+        <div style="text-align: right;" class="mt-4">
+            <button class="btn btn-light-primary fw-bold"
+                (click)="closeDialogNoteMathFunc()">Hủy bỏ</button>
+            <button
+                (click)="mathConfirm()"
+                [buttonBusy]="matching"
+                class="btn btn-primary">Xác nhận</button>
+        </div>
+    </div>
+</p-dialog>

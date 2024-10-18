@@ -1,0 +1,614 @@
+﻿<div appBsModal
+    #createOrEditModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="createOrEditModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static', keyboard: !saving }">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form #batchFileCreateForm="ngForm"
+                (ngSubmit)="save()" autocomplete="new-password">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span>{{
+                            'Thêm mới mẫu BF' | localize }}</span>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row align-items-center">
+                        <!-- <form #batchFileCreateForm="ngForm"
+                            autocomplete="new-password" (ngSubmit)="save()">
+                            
+                        </form> -->
+                        <div class="row mb-5 align-items-center">
+                            <div class="col-md-3 col-sm-12 col-12">
+                                <label class="form-label">{{
+                                    'Tên nguồn dữ liệu'
+                                    |
+                                    localize }} <span style="color: red;">*</span></label>
+                            </div>
+                            <div class="col-md-9 col-sm-12 col-12">
+                                <input
+                                    id="SourceDataName"
+                                    #SourceDataNameInput="ngModel"
+                                    class="form-control"
+                                    type="text"
+                                    name="SourceDataName"
+                                    pattern="^(?![\s]{2,})\s*(.*[^\s])\s*$"
+                                    [(ngModel)]="batchFile.SourceDataName"
+                                    required
+                                    maxlength="100" />
+                                <div
+                                    *ngIf="SourceDataNameInput.hasError('pattern') && !SourceDataNameInput.pristine">
+                                    <span
+                                        class="form-text text-danger text-left">{{
+                                        'Giá trị nhập vào không hợp lệ' |
+                                        localize }}</span>
+                                </div>
+                                <div
+                                    *ngIf="!SourceDataNameInput.valid && SourceDataNameInput.hasError('required') && !SourceDataNameInput.pristine">
+                                    <span
+                                        class="form-text text-danger text-left">{{
+                                        'Không được để trống' | localize }}</span>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row mb-5 align-items-center">
+                            <div class="col-md-3 col-sm-12 col-12">
+                                <label class="form-label">{{ 'Tên mẫu BF' |
+                                    localize }} <span style="color: red;">*</span></label>
+                            </div>
+                            <div class="col-md-9 col-sm-12 col-12">
+                                <input
+                                    id="FileName"
+                                    #FileNameInput="ngModel"
+                                    class="form-control"
+                                    type="text"
+                                    name="FileName"
+                                    pattern="^(?!\s*$)\s*.+"
+                                    [(ngModel)]="batchFile.FileName"
+                                    required
+                                    maxlength="100" />
+                                <div
+                                    *ngIf="FileNameInput.hasError('pattern') && !FileNameInput.pristine">
+                                    <span
+                                        class="form-text text-danger text-left">{{
+                                        'Giá trị nhập vào không hợp lệ' |
+                                        localize }}</span>
+                                </div>
+                                <div
+                                    *ngIf="!FileNameInput.valid && FileNameInput.hasError('required') && !FileNameInput.pristine">
+                                    <span
+                                        class="form-text text-danger text-left">{{
+                                        'Không được để trống' | localize }}</span>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row mb-5 align-items-center">
+                            <div class="col-md-3 col-sm-12 col-12">
+                                <label class="form-label">{{ 'Mã mẫu BF' |
+                                    localize }} <span style="color: red;">*</span></label>
+                            </div>
+                            <div class="col-md-9 col-sm-12 col-12">
+                                <input
+                                    id="FileCode"
+                                    #FileCodeInput="ngModel"
+                                    class="form-control"
+                                    type="text"
+                                    name="FileCode"
+                                    [(ngModel)]="batchFile.FileCode"
+                                    pattern="^(?!\s*$).+"
+                                    required
+                                    maxlength="30" />
+                                <div
+                                    *ngIf="FileCodeInput.hasError('pattern') && !FileCodeInput.pristine">
+                                    <span
+                                        class="form-text text-danger text-left">{{
+                                        'Giá trị nhập vào không hợp lệ' |
+                                        localize }}</span>
+                                </div>
+                                <div
+                                    *ngIf="!FileCodeInput.valid && FileCodeInput.hasError('required') && !FileCodeInput.pristine">
+                                    <span
+                                        class="form-text text-danger text-left">{{
+                                        'Không được để trống' | localize }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-5 align-items-center">
+                            <div class="col-md-3 col-sm-12 col-12">
+                                <label class="form-label">{{ 'Mô tả' |
+                                    localize }}
+                                </label>
+                            </div>
+                            <div class="col-md-9 col-sm-12 col-12">
+                                <textarea
+                                    id="Description"
+                                    #DescriptionInput="ngModel"
+                                    class="form-control"
+                                    type="text"
+                                    name="Description"
+                                    [(ngModel)]="batchFile.Description"
+                                    pattern="^(?!\s*$).+"
+                                    maxlength="300">
+                                    <div
+                                        *ngIf="DescriptionInput.invalid && !DescriptionInput.pristine">
+                                        <span
+                                            class="form-text text-danger text-left"
+                                            *ngIf="DescriptionInput.hasError('pattern')">
+                                            {{ 'Giá trị nhập vào không hợp lệ.'
+                                            |localize }}
+                                        </span>
+                                    </div>
+                                </textarea>
+                                <validation-messages
+                                    [formCtrl]="DescriptionInput">
+                                    <ng-template #pattern>
+                                        <span
+                                            class="form-text text-danger text-left">
+                                            {{ 'Giá trị nhập vào không hợp lệ.'
+                                            | localize }}
+                                        </span>
+                                    </ng-template>
+                                </validation-messages>
+                                <!-- <validation-messages
+                                    [formCtrl]="DescriptionInput"></validation-messages> -->
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div
+                                class="col-md-6 col-sm-12 col-12 d-flex align-items-center"
+                                style="margin-bottom: 20px;">
+                                <input
+                                    type="radio"
+                                    id="useDataFromFtp"
+                                    name="useDataFromFtp"
+                                    [checked]="batchFile.useDataFromFtp === true"
+                                    [value]="2"
+                                    class="form-check-input"
+                                    (change)="onchangeRadioUseDataFrom(1)"
+                                    style="margin-right: 5px;" />
+                                <label for="useDataFromFtp"
+                                    class="form-label mb-0">{{
+                                    'Lấy dữ liệu từ ftp/sftp server' | localize
+                                    }}</label>
+                            </div>
+                            <div *ngIf="batchFile.useDataFromFtp">
+                                <div class="row mb-5 align-items-center">
+                                    <div class="col-md-3 col-sm-12 col-12">
+                                        <label class="form-label">{{
+                                            'Link dữ liệu lấy báo cáo' |
+                                            localize }} <span
+                                                style="color: red;">*</span></label>
+                                    </div>
+                                    <div class="col-md-9 col-sm-12 col-12">
+                                        <input
+                                            id="SourceDataLink2"
+                                            #SourceDataLink2Input="ngModel"
+                                            class="form-control"
+                                            type="url"
+                                            name="SourceDataLink2"
+                                            required
+                                            [(ngModel)]="batchFile.SourceDataLink" />
+                                        <div
+                                            *ngIf="SourceDataLink2Input.hasError('pattern') && !SourceDataLink2Input.pristine">
+                                            <span
+                                                class="form-text text-danger text-left">{{
+                                                'Giá trị nhập vào không hợp lệ'
+                                                |
+                                                localize }}</span>
+                                        </div>
+                                        <div
+                                            *ngIf="!SourceDataLink2Input.valid && SourceDataLink2Input.hasError('required') && !SourceDataLink2Input.pristine">
+                                            <span
+                                                class="form-text text-danger text-left">
+                                                Trường này không được bỏ trống
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="row mb-5 align-items-center">
+                                    <div class="col-md-3 col-sm-12 col-12">
+                                        <label class="form-label">{{ 'Tài khoản'
+                                            |
+                                            localize }}</label>
+                                    </div>
+                                    <div class="col-md-3 col-sm-12 col-12">
+                                        <input
+                                            id="SourceDataAccount"
+                                            #SourceDataAccountInput="ngModel"
+                                            class="form-control"
+                                            type="text"
+                                            name="SourceDataAccount"
+                                            [(ngModel)]="batchFile.SourceDataAccount"
+                                            maxlength="64"
+                                            pattern="^[A-Za-z0-9_.]+$" />
+                                        <div
+                                            *ngIf="SourceDataAccountInput.hasError('pattern') && !SourceDataAccountInput.pristine">
+                                            <span
+                                                class="form-text text-danger text-left">{{
+                                                'Giá trị nhập vào không hợp lệ'
+                                                |
+                                                localize }}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-12 col-12">
+                                        <label class="form-label">{{ 'Mật khẩu'
+                                            | localize }}</label>
+                                    </div>
+                                    <div class="col-md-3 col-sm-12 col-12">
+                                        <input
+                                            autocomplete="off"
+                                            id="SourceDataPassword"
+                                            #SourceDataPasswordInput="ngModel"
+                                            class="form-control"
+                                            type="text"
+                                            name="SourceDataPassword"
+                                            [(ngModel)]="batchFile.SourceDataPassword"
+                                            maxlength="30"
+                                            minlength="6"
+                                            pattern="^(?![\s]{2,}).*$" />
+                                        <div
+                                            *ngIf="SourceDataPasswordInput.invalid && !SourceDataPasswordInput.pristine">
+                                            <span
+                                                class="form-text text-danger text-left">
+                                                <span
+                                                    *ngIf="SourceDataPasswordInput.hasError('pattern')">
+                                                    {{ 'Mật khẩu không hợp lệ. '
+                                                    | localize }}
+                                                </span>
+                                                <span
+                                                    *ngIf="SourceDataPasswordInput.hasError('minlength')">
+                                                    {{
+                                                    'Mật khẩu phải chứa ít nhất 6 ký tự. '
+                                                    | localize }}
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       <!-- email -->
+                        <div class="row">
+                            <div
+                                class="col-md-6 col-sm-12 col-12 d-flex align-items-center"
+                                style="margin-bottom: 20px;">
+                                <input
+                                    type="radio"
+                                    id="UseDataFromEmail"
+                                    name="UseDataFromEmail"
+                                    [checked]="batchFile.useDataFromEmail === true"
+                                    [value]="2"
+                                    class="form-check-input"
+                                    (change)="onchangeRadioUseDataFrom(2)"
+                                    style="margin-right: 5px;" />
+                                <label for="UseDataFromEmail"
+                                    class="form-label mb-0">{{
+                                    'Lấy dữ liệu từ email' | localize }}</label>
+                            </div>
+                            <div *ngIf="batchFile.useDataFromEmail">
+                                <div class="row mb-5 align-items-center">
+                                    <div class="col-md-3 col-sm-12 col-12">
+                                        <label class="form-label">{{
+                                            'Server' |
+                                            localize }} <span
+                                                style="color: red;">*</span></label>
+                                    </div>
+                                    <div class="col-md-9 col-sm-12 col-12">
+                                        <input
+                                            id="emailHost"
+                                            #emailHost2Input="ngModel"
+                                            class="form-control"
+                                            type="url"
+                                            name="emailHost"
+                                            [(ngModel)]="batchFile.emailHost"
+                                            required />
+                                        <div
+                                            *ngIf="emailHost2Input.hasError('pattern') && !emailHost2Input.pristine">
+                                            <span
+                                                class="form-text text-danger text-left">{{
+                                                'Giá trị nhập vào không hợp lệ'
+                                                |
+                                                localize }}</span>
+                                        </div>
+                                        <div
+                                            *ngIf="!emailHost2Input.valid && emailHost2Input.hasError('required') && !emailHost2Input.pristine">
+                                            <span
+                                                class="form-text text-danger text-left">
+                                                Trường này không được bỏ trống
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-5 align-items-center">
+                                    <div class="col-md-3 col-sm-12 col-12">
+                                        <label class="form-label">
+                                            {{'Port' | localize }}
+                                            <span style="color: red;">*</span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-9 col-sm-12 col-12">
+                                        <input
+                                            id="emailPort"
+                                            #emailPortInput="ngModel"
+                                            class="form-control"
+                                            type="url"
+                                            name="emailPort"
+                                            [(ngModel)]="batchFile.emailPort"
+                                            required
+                                            pattern="^\s*\d+\s*$" />
+                                        <div
+                                            *ngIf="emailPortInput.hasError('pattern') && !emailPortInput.pristine">
+                                            <span
+                                                class="form-text text-danger text-left">{{
+                                                'Giá trị nhập vào không hợp lệ, chỉ được nhập số.'
+                                                |
+                                                localize }}</span>
+                                        </div>
+                                        <div
+                                            *ngIf="!emailPortInput.valid && emailPortInput.hasError('required') && !emailPortInput.pristine">
+                                            <span
+                                                class="form-text text-danger text-left">
+                                                Trường này không được bỏ trống
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-5 align-items-center">
+                                    <div class="col-md-3 col-sm-12 col-12">
+                                        <label class="form-label">{{ 'Tài khoản'
+                                            |
+                                            localize }}</label>
+                                    </div>
+                                    <div class="col-md-3 col-sm-12 col-12">
+                                        <input
+                                            id="emailAccount"
+                                            #emailAccountInput="ngModel"
+                                            class="form-control"
+                                            type="text"
+                                            name="emailAccount"
+                                            [(ngModel)]="batchFile.emailAccount"
+                                            maxlength="64"
+                                            pattern="^[A-Za-z0-9_@.]+$" />
+                                        <div
+                                            *ngIf="emailAccountInput.hasError('pattern') && !emailAccountInput.pristine">
+                                            <span
+                                                class="form-text text-danger text-left">{{
+                                                'Giá trị nhập vào không hợp lệ'
+                                                |
+                                                localize }}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-12 col-12">
+                                        <label class="form-label">{{ 'Mật khẩu'
+                                            |
+                                            localize }}</label>
+                                    </div>
+                                    <div class="col-md-3 col-sm-12 col-12">
+                                        <input
+                                            autocomplete="false"
+                                            id="emailPassword"
+                                            #emailPasswordInput="ngModel"
+                                            class="form-control"
+                                            type="text"
+                                            name="emailPassword"
+                                            [(ngModel)]="batchFile.emailPassword"
+                                            minlength="6"
+                                            pattern="^(?![\s]{2,}).*$" />
+                                        <div
+                                            *ngIf="emailPasswordInput.invalid && !emailPasswordInput.pristine">
+                                            <span
+                                                class="form-text text-danger text-left">
+                                                <span
+                                                    *ngIf="emailPasswordInput.hasError('pattern')">
+                                                    {{
+                                                    'Giá trị nhập vào không hợp lệ.'
+                                                    |localize }}
+                                                </span>
+                                                <span
+                                                    *ngIf="emailPasswordInput.hasError('minlength')">
+                                                    {{
+                                                    'Mật khẩu phải chứa ít nhất 6 ký tự.'
+                                                    |localize }}
+                                                </span>
+                                            </span>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-5 align-items-center">
+                                    <div class="col-md-3 col-sm-12 col-12">
+                                        <label class="form-label">{{
+                                            'Tiêu đề chứa nội dung' | localize
+                                            }}
+                                            <span style="color: red;">*</span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-9 col-sm-12 col-12">
+                                        <input
+                                            id="subjectEmailIdentified"
+                                            #subjectEmailIdentifiedInput="ngModel"
+                                            class="form-control"
+                                            type="text"
+                                            required
+                                            name="subjectEmailIdentified"
+                                            [(ngModel)]="batchFile.subjectEmailIdentified"
+                                            pattern="^(?!\s{2,}).*$" />
+                                        <div
+                                            *ngIf="subjectEmailIdentifiedInput.hasError('pattern') && !subjectEmailIdentifiedInput.pristine">
+                                            <span
+                                                class="form-text text-danger text-left">
+                                                {{'Giá trị nhập vào không hợp lệ'|localize
+                                                }}
+                                            </span>
+                                        </div>
+                                        <div
+                                            *ngIf="!subjectEmailIdentifiedInput.valid && subjectEmailIdentifiedInput.hasError('required') && !subjectEmailIdentifiedInput.pristine">
+                                            <span
+                                                class="form-text text-danger text-left">
+                                                Trường này không được bỏ trống
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-5">
+                            <div>
+                                <div class="btn-group"
+                                    placement="button right">
+                                    <p-fileUpload
+                                        mode="basic"
+                                        customUpload="true"
+                                        name="ExcelFileUpload"
+                                        #ExcelFileUpload
+                                        maxFileSize="10000000"
+                                        auto="auto"
+                                        accept=".csv,.xls,.xlsx"
+                                        (uploadHandler)="uploadExcel($event)"
+                                        (onError)="onUploadExcelError()"
+                                        chooseLabel="{{ 'Upload file mẫu' | localize }}">
+                                    </p-fileUpload>
+                                </div>
+                            </div>
+
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Tên trường dữ liệu</th>
+                                        <th>Trường đối soát</th>
+                                        <th>Yêu cầu</th>
+                                        <th>Dữ liệu chính</th>
+                                        <th>NCC/Đại lý</th>
+                                        <!-- <th>Hành động</th> -->
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr
+                                        *ngIf="batchFile.BatchFileFieldDataDtos && batchFile.BatchFileFieldDataDtos.length > 0">
+                                        <td></td>
+                                        <td></td>
+                                        <td>
+                                            <label
+                                                class="form-check form-check-custom form-check-solid py-1">
+                                                <input
+                                                    (change)="toggleReconcileAll()"
+                                                    [(ngModel)]="isReconcileAll"
+                                                    type="checkbox"
+                                                    name="IsReconcileAll"
+                                                    class="form-check-input" />
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <label
+                                                class="form-check form-check-custom form-check-solid py-1">
+                                                <input
+                                                    (change)="toggleRequiredAll()"
+                                                    [(ngModel)]="isRequiredAll"
+                                                    type="checkbox"
+                                                    name="IsRequiredAll"
+                                                    class="form-check-input" />
+                                            </label>
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr class="tr-hover"
+                                        *ngFor="let item of batchFile.BatchFileFieldDataDtos; index as i;  trackBy: trackByFn">
+                                        <td
+                                            class="d-flex justify-content-between align-items-center">{{i
+                                            + 1}}</td>
+                                        <td>{{item.FieldDataName}}</td>
+                                        <td>
+                                            <label
+                                                class="form-check form-check-custom form-check-solid py-1">
+                                                <input
+                                                    (change)="changeIsReconcileItem()"
+                                                    type="checkbox"
+                                                    [name]="'IsReconcile' + i"
+                                                    [(ngModel)]="batchFile.BatchFileFieldDataDtos[i].IsReconcile"
+                                                    class="form-check-input" />
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <label
+                                                class="form-check form-check-custom form-check-solid py-1">
+                                                <input
+                                                    (change)="changeIsRequiredItem()"
+                                                    type="checkbox"
+                                                    [name]="'IsRequired' + i"
+                                                    [(ngModel)]="batchFile.BatchFileFieldDataDtos[i].IsRequired"
+                                                    class="form-check-input" />
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <label
+                                                class="form-check form-check-custom form-check-solid py-1">
+                                                <input
+                                                    type="checkbox"
+                                                    [name]="'IsKey' + i"
+                                                    [(ngModel)]="batchFile.BatchFileFieldDataDtos[i].IsKey"
+                                                    (change)="onCheckboxChange(i)"
+                                                    class="form-check-input" />
+                                            </label>
+                                        </td>
+                                        <td><select
+                                                class="form-control form-control-sm"
+                                                [name]="'ColumnIdentified' + i"
+                                                [(ngModel)]="item.ColumnIdentified"
+                                                (change)="onSelectionChange(i,$event.target.value,i)">
+                                                <option value="0"></option>
+                                                <option value="1">Nhà cung
+                                                    cấp</option>
+                                                <option value="2">Đại lý</option>
+                                            </select>
+                                        </td>
+                                        <!-- <td>
+                                            <button
+                                                class="btn btn-sm btn-danger fw-bold"
+                                                type="button"
+                                                (click)="deleteRowTableField(batchFile.BatchFileFieldDataDtos[i])">Xóa</button>
+                                        </td> -->
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <button
+                                type="button"
+                                class="btn btn-light-primary fw-bold"
+                                [routerLink]="['/app/reconciliation/batch-file']"
+                                (click)="cancel()">
+
+                                <span class="d-none d-md-inline-block">
+                                    {{ 'Cancel' | localize }}
+                                </span>
+                            </button>
+                            <button
+                                *ngIf="'Pages.Administration.BatchFile.Create' | permission"
+                                [buttonBusy]="saving"
+                                type="submit"
+                                class="btn btn-primary fw-bold"
+                                [disabled]="!batchFileCreateForm.form.valid">
+                                <i class="fa fa-save"></i>
+                                <span>{{ 'Save' | localize }}</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,28 @@
+#cycle{
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    appearance: none; /* Remove default appearance for some browsers */
+    -webkit-appearance: none; /* Remove default appearance for Safari */
+    -moz-appearance: none; /* Remove default appearance for Firefox */
+    background: #ffffff url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAKklEQVR42mNgoDZITk4WosiAtLS0MgMDA8NjYmL8f/8MwvPzMyKVSuX5z78YFhZGJiYGSkpaRhBDAwMjqyCUMwAAAABJRU5ErkJggg==') no-repeat right center;
+    background-size: 15px 10px;
+}
+
+
+.round-button {
+    width: 40px; /* Đặt kích thước chiều rộng và chiều cao theo ý muốn */
+    height: 40px;
+    border-radius: 50%; /* Biến nút thành hình tròn */
+    background-color: black; /* Đặt màu nền thành màu đen */
+    color: white; /* Đặt màu chữ thành trắng hoặc màu bạn mong muốn */
+    text-align: center;
+    line-height: 40px; /* Để chữ ở giữa nút */
+    cursor: pointer; 
+    border: none; /* Loại bỏ viền */
+}
+.my-custom {
+    margin-top: 20px;
+    margin-bottom: 20px !important;
+}

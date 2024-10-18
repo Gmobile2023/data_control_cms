@@ -1,0 +1,650 @@
+<div
+    appBsModal
+    #createOrEditModal="bs-modal"
+    class="modal fade "
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="createOrEditModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static', keyboard: !saving }">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #supplierServiceForm="ngForm"
+                (ngSubmit)="save()" autocomplete="new-password">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="supplierServiceDto.id">{{
+                            'Chỉnh sửa nhà cung cấp' |
+                            localize }}</span>
+                        <span *ngIf="!supplierServiceDto.id">{{
+                            'Thêm mới nhà cung cấp' |
+                            localize }}</span>
+                    </h4>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        (click)="close()"
+                        [disabled]="saving">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-5 row align-items-center">
+                        <div class="col-md-2 col-12">
+                            <label class="form-label">{{ 'Nhà cung cấp' |
+                                localize }}</label>
+                            <span style="color: red;"> *</span>
+                        </div>
+                        <div class="col-md-4 col-12">
+                            <p-dropdown
+                                [options]="supplierDropList"
+                                (change)="changeInputChooseSupplier()"
+                                [(ngModel)]="supplierServiceDto.supplierId"
+                                [filter]="true"
+                                optionLabel="supplierName"
+                                optionValue="supplierId"
+                                placeholder="Chọn nhà cung cấp"
+                                name="supplierId"
+                                required
+                                #supplierNameTb="ngModel">
+                            </p-dropdown>
+
+                            <validation-messages
+                                [formCtrl]="supplierNameTb"></validation-messages>
+                        </div>
+                        <div class="col-md-1">
+                            <input
+                                [value]="1"
+                                id="isUseSupplierName"
+                                [checked]="supplierServiceDto.isUseSupplierName === true"
+                                type="radio"
+                                name="isUseNameOrCode"
+                                (change)="onchangeRadioCodeOrName(1)"
+                                class="form-check-input" />
+                        </div>
+                        <div class="col-md-2">
+                            Đối soát theo tên
+                        </div>
+                        <div class="col-md-1">
+                            <input
+                                [value]="2"
+                                id="isUseSupplierCode"
+                                [checked]="supplierServiceDto.isUseSupplierCode === true"
+                                type="radio"
+                                name="isUseNameOrCode"
+                                (change)="onchangeRadioCodeOrName(2)"
+                                class="form-check-input" />
+                        </div>
+                        <div class="col-md-2">
+                            Đối soát theo mã
+                        </div>
+                    </div>
+
+                    <div class="row mb-5">
+                        <div class="col-md-1">
+                            <input
+                                [value]="2"
+                                id="useDataFromFtp"
+                                [checked]="supplierServiceDto.useDataFromFtp === true"
+                                type="radio"
+                                (change)="onchangeRadioUseDataFrom(2)"
+                                name="useDataFrom"
+                                class="form-check-input" />
+                        </div>
+                        <div class="col-md-4">
+                            Lấy dữ liệu từ ftp/sftp server
+                        </div>
+
+                        <div class="mt-3"
+                            *ngIf="supplierServiceDto.useDataFromFtp === true">
+                            <div class="mb-5 row align-items-center ">
+                                <div class="col-md-1">
+                                    <input
+                                        (change)="changeInputIsDataSourceFromSupplier()"
+                                        id="isDataSourceFromSupplier"
+                                        type="checkbox"
+                                        name="isDataSourceFromSupplier"
+                                        [(ngModel)]="supplierServiceDto.isDataSourceFromSupplier"
+                                        class="form-check-input" />
+                                </div>
+                                <div class="col-md-11">
+                                    Sử dụng nguồn dữ liệu nhà cung cấp
+                                </div>
+                            </div>
+                            <div class="mb-5 row align-items-center">
+                                <div class="col-md-2 col-12">
+                                    <label class="form-label">{{ 'Nguồn dữ liệu'
+                                        |
+                                        localize }}</label>
+                                    <span style="color: red;"> *</span>
+                                </div>
+                                <div class="col-md-10 col-12">
+                                    <input
+                                        [disabled]="supplierServiceDto.isDataSourceFromSupplier"
+                                        id="dataSourceLink"
+                                        #sourTb="ngModel"
+                                        class="form-control"
+                                        type="url"
+                                        required
+                                        name="dataSourceLink"
+                                        [(ngModel)]="supplierServiceDto.dataSourceLink" />
+                                    <div
+                                        *ngIf="supplierServiceForm?.controls?.dataSourceLink?.errors?.required && !sourTb.pristine">
+                                        <span
+                                            class="form-text text-danger text-left">{{
+                                            'Trường này là bắt buộc' | localize
+                                            }}</span>
+                                    </div>
+                                    <!-- <div
+                                        *ngIf="supplierServiceForm?.controls?.dataSourceLink?.errors?.pattern && !sourTb.pristine">
+                                        <span
+                                            class="form-text text-danger text-left">{{
+                                            'Link không đúng định dạng' |
+                                            localize
+                                            }}</span>
+                                    </div> -->
+                                </div>
+
+                            </div>
+                            <div class="mb-5 row align-items-center">
+                                <div class="col-md-6 col-12">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-4 col-12">
+                                            <label class="form-label">{{
+                                                'Tài khoản'
+                                                |
+                                                localize }}</label>
+
+                                        </div>
+                                        <div class="col-md-8 col-12">
+                                            <input
+                                                [disabled]="supplierServiceDto.isDataSourceFromSupplier"
+                                                id="dataSourceAccount"
+                                                #accountTb="ngModel"
+                                                class="form-control"
+                                                type="text"
+                                                name="dataSourceAccount"
+                                                [(ngModel)]="supplierServiceDto.dataSourceAccount"
+                                                maxlength="64" />
+                                            <!-- <validation-messages
+                                                [formCtrl]="accountTb"></validation-messages> -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-4">
+                                            Mật khẩu
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input
+                                                [disabled]="supplierServiceDto.isDataSourceFromSupplier"
+                                                id="dataSourcePassword"
+                                                #passTb="ngModel"
+                                                class="form-control"
+                                                type="text"
+                                                name="dataSourcePassword"
+                                                [(ngModel)]="supplierServiceDto.dataSourcePassword"
+                                                maxlength="64" />
+                                            <!-- <validation-messages
+                                                [formCtrl]="passTb"></validation-messages> -->
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-5">
+                        <div class="col-md-1">
+                            <input
+                                [value]="2"
+                                id="useDataFromEmail"
+                                [checked]="supplierServiceDto.useDataFromEmail === true"
+                                type="radio"
+                                (change)="onchangeRadioUseDataFrom(1)"
+                                name="useDataFrom"
+                                class="form-check-input" />
+                        </div>
+                        <div class="col-md-4">
+                            Lấy dữ liệu từ email
+                        </div>
+
+                        <div class="mt-3"
+                            *ngIf="supplierServiceDto.useDataFromEmail === true">
+                            <div class="mb-5 row align-items-center">
+                                <div class="col-md-2 col-12">
+                                    <label class="form-label">{{ 'Server'
+                                        |
+                                        localize }}</label>
+                                    <span style="color: red;"> *</span>
+                                </div>
+                                <div class="col-md-10 col-12">
+                                    <input
+                                        id="emailHost"
+                                        #emailHost="ngModel"
+                                        class="form-control"
+                                        type="text"
+                                        name="emailHost"
+                                        [(ngModel)]="supplierServiceDto.emailHost" />
+                                    <!-- <div
+                                        *ngIf="supplierServiceForm?.controls?.dataSourceLink?.errors?.required && !sourTb.pristine">
+                                        <span
+                                            class="form-text text-danger text-left">{{
+                                            'Trường này là bắt buộc' | localize }}</span>
+                                    </div> -->
+                                </div>
+                            </div>
+                            <div class="mb-5 row align-items-center">
+                                <div class="col-md-2 col-12">
+                                    <label class="form-label">{{ 'Port'
+                                        |
+                                        localize }}</label>
+                                    <span style="color: red;"> *</span>
+                                </div>
+                                <div class="col-md-10 col-12">
+                                    <input
+                                        id="emailPort"
+                                        #emailPort="ngModel"
+                                        class="form-control"
+                                        type="text"
+                                        name="emailPort"
+                                        [(ngModel)]="supplierServiceDto.emailPort" />
+                                    <!-- <div
+                                        *ngIf="supplierServiceForm?.controls?.dataSourceLink?.errors?.required && !sourTb.pristine">
+                                        <span
+                                            class="form-text text-danger text-left">{{
+                                            'Trường này là bắt buộc' | localize }}</span>
+                                    </div> -->
+                                </div>
+                            </div>
+                            <div class="mb-5 row align-items-center">
+                                <div class="col-md-6 col-12">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-4 col-12">
+                                            <label class="form-label">{{
+                                                'Tài khoản'
+                                                |
+                                                localize }}</label>
+                                        </div>
+                                        <div class="col-md-8 col-12">
+                                            <input
+                                                id="emailAccount"
+                                                #emailAccount="ngModel"
+                                                class="form-control"
+                                                type="text"
+                                                name="emailAccount"
+                                                [(ngModel)]="supplierServiceDto.emailAccount"
+                                                maxlength="64" />
+                                            <!-- <validation-messages
+                                                [formCtrl]="accountTb"></validation-messages> -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-4">
+                                            Mật khẩu
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input
+                                                id="emailPassword"
+                                                #emailPassword="ngModel"
+                                                class="form-control"
+                                                type="text"
+                                                name="emailPassword"
+                                                [(ngModel)]="supplierServiceDto.emailPassword" />
+                                            <!-- <validation-messages
+                                                [formCtrl]="passTb"></validation-messages> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-5 row align-items-center">
+                                <div class="col-md-2 col-12">
+                                    <label class="form-label">{{
+                                        'Định dạng tên email'
+                                        |
+                                        localize }}</label>
+                                    <span style="color: red;"> *</span>
+                                </div>
+                                <div class="col-md-10 col-12">
+                                    <input
+                                        id="subjectEmailIdentified"
+                                        #subjectEmailIdentified="ngModel"
+                                        class="form-control"
+                                        type="text"
+                                        name="subjectEmailIdentified"
+                                        [(ngModel)]="supplierServiceDto.subjectEmailIdentified" />
+                                    <!-- <div
+                                        *ngIf="supplierServiceForm?.controls?.dataSourceLink?.errors?.required && !sourTb.pristine">
+                                        <span
+                                            class="form-text text-danger text-left">{{
+                                            'Trường này là bắt buộc' | localize }}</span>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-5 row align-items-center">
+                        <div class="col-md-2 col-12">
+                            <label class="form-label">{{
+                                'Định dạng tên file lấy dữ liệu đối soát'
+                                |
+                                localize }}<span style="color: red;"> *</span></label>
+
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <input
+                                id="fileNameReconcileFormat"
+                                #fileNameReconcileFormat="ngModel"
+                                class="form-control"
+                                type="url"
+                                required
+                                name="fileNameReconcileFormat"
+                                (input)="checkFileNameFormat($event)"
+                                [(ngModel)]="supplierServiceDto.fileNameReconcileFormat" />
+                            <span
+                                class="text-danger "
+                                style="font-style: italic; font-size: 13px;"
+                                *ngIf="invalidFileNameFormat">Lưu ý: điền đúng
+                                định dạng 2 tham số Date, TenDichVu và MaNCC hoặc TenNCC
+                                <p class="text-danger">
+                                    chưa nhập đủ tham số vui lòng nhập lại !
+                                </p>
+                            </span>
+
+                        </div>
+                        <div class="col-md-3 col-sm-12 col-12"
+                            style="margin-left: 10px;">
+                            <button
+                                type="button"
+                                (click)="showDialog()"
+                                class="round-button"><i class="bi bi-info-lg"
+                                    style="font-size: 2em; display: block; margin: 0 auto;"></i>
+                            </button>
+                            <p-dialog [(visible)]="visible"
+                                [style]="{width: '20vw'}">
+                                <p [innerHTML]="getPopoverContentAsHtml()"></p>
+                            </p-dialog>
+
+                        </div>
+                    </div>
+
+                    <div class="row mb-5 align-items-center">
+                        <div class="col-md-2 col-sm-12 col-12">
+                            <label class="form-label">{{ 'Ngày lấy dữ liệu'|
+                                localize}} <span style="color: red;"> *</span>{{' = {Date}  + số ngày lệch'
+                                |
+                                localize }} </label>
+
+                        </div>
+
+                        <div class="col-md-3 col-sm-12 col-12">
+                            <input
+                                [(ngModel)]="supplierServiceDto.daysDifference"
+                                name="daysDifference"
+                                id="daysDifference"
+                                class="form-control"
+                                type="number"
+                                min="0" />
+                        </div>
+                    </div>
+
+                    <div class="mb-5 row align-items-center">
+                        <div class="col-md-2 col-12">
+                            <label class="form-label">{{
+                                'Định dạng tên file báo cáo đối soát'
+                                |
+                                localize }}<span style="color: red;"> *</span></label>
+
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <input
+                                id="fileNameFormatSend"
+                                #fileNameFormatSend="ngModel"
+                                class="form-control"
+                                type="text"
+                                required
+                                name="fileNameFormatSend"
+                                [(ngModel)]="supplierServiceDto.fileNameFormatSend" />
+                                <validation-messages
+                                [formCtrl]="fileNameFormatSend"></validation-messages>
+                        </div>
+                        <div class="col-md-3 col-sm-12 col-12"
+                            style="margin-left: 10px;">
+                            <button
+                                type="button"
+                                (click)="showDialog1()"
+                                class="round-button"><i class="bi bi-info-lg"
+                                    style="font-size: 2em; display: block; margin: 0 auto;"></i></button>
+                            <p-dialog [(visible)]="visible1"
+                                [style]="{width: '20vw'}">
+                                <p [innerHTML]="getPopoverContentAsHtml1()"></p>
+
+                            </p-dialog>
+
+                        </div>
+                    </div>
+
+                    <h4>Dữ liệu đối soát</h4>
+                    <div class="mb-5 row align-items-center">
+                        <div class="col-md-2">Tải file mẫu</div>
+                        <div class="col-md-4">
+                            <div class="btn-group"
+                                placement="button right">
+
+                                <p-fileUpload
+                                    mode="basic"
+                                    customUpload="true"
+                                    name="ExcelFileUpload"
+                                    #ExcelFileUpload
+                                    maxFileSize="10000000"
+                                    auto="auto"
+                                    (uploadHandler)="uploadExcel($event)"
+                                    (onError)="onUploadExcelError()"
+                                    accept=".csv,.xls,.xlsx"
+                                    chooseLabel="{{ 'Upload file mẫu' | localize }}"></p-fileUpload>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-5 row align-items-center">
+                        <div>Các trường đối soát tương ứng theo bảng</div>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Tên trường dữ liệu</th>
+                                    <th>Yêu cầu</th>
+                                    <th>Trường dữ liệu đối soát</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="tr-hover"
+                                    *ngFor="let item of supplierServiceDto.template; index as i;">
+                                    <td>{{i + 1}}</td>
+                                    <td>{{item.fieldNameTemplateBatchFile}}</td>
+                                    <td>
+                                        <input disabled class="form-check-input"
+                                            [name]="'check' + i" type="checkbox"
+                                            [(ngModel)]="item.isRequired" />
+                                    </td>
+                                    <td>
+                                        <select class="form-control"
+                                            [name]="'tem' + i"
+                                            (change)="onChangeValueFiledSupplier()"
+                                            [(ngModel)]="item.fieldNameTemplateSupplier">
+                                            <option value></option>
+                                            <option
+                                                *ngFor="let item of templateSupplier"
+                                                [value]="item">{{item}}</option>
+                                        </select>
+                                        <span
+                                            *ngIf="item.isRequired && !item.fieldNameTemplateSupplier"
+                                            class="form-text text-danger text-left">
+                                            Trường dữ liệu bắt buộc phải có giá
+                                            trị
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                   
+                    <div class="row mb-5 align-items-center">
+                        <div class="col-md-1 col-sm-12 col-12">
+                            <input
+                                name="checkReport"
+                                type="checkbox"
+                                id="checkReport"
+                                class="checkReport form-check-input"
+                                [(ngModel)]="supplierServiceDto.sendReportChecked"
+                                (change)="onSendReportChecked()">
+                        </div>
+                        <div class="col-md-3 col-sm-12 col-12">
+                            <span>Gửi báo cáo sau đối soát</span>
+                        </div>
+                    </div>
+                    <div class="row mb-5 align-items-center"
+                        *ngIf="supplierServiceDto.sendReportChecked">
+                        <div class="col-md-1 col-sm-12 col-12">
+                            <input
+                                name="checkSendEMail1"
+                                type="checkbox"
+                                id="checkSendEMail1"
+                                class="checkSendEMail form-check-input"
+                                [(ngModel)]="supplierServiceDto.isSendMail" />
+                        </div>
+                        <div class="col-md-3 col-sm-12 col-12">
+                            <span>Gửi Email</span>
+                        </div>
+                    </div>
+                    <div *ngIf="supplierServiceDto.isSendMail">
+                        <div class="row mb-5 align-items-center">
+
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <label class="form-label">{{ 'Email' |
+                                    localize }}</label>
+                                <span style="color: red;"> *</span>
+                            </div>
+                            <div class="col-md-5 col-sm-12 col-12">
+                                <input
+                                    [disabled]="supplierServiceDto.isEmailFromSupplier"
+                                    [(ngModel)]="supplierServiceDto.emailReceiver"
+                                    id="emailReceiver"
+                                    #emailTb="ngModel"
+                                    class="form-control"
+                                    type="text"
+                                    required
+                                    name="emailReceiver"
+                                    maxlength="64" />
+                                <div
+                                    *ngIf="supplierServiceForm?.controls?.emailReceiver?.errors?.required && !emailTb.pristine">
+                                    <span
+                                        class="form-text text-danger text-left">{{
+                                        'Trường này là bắt buộc' |
+                                        localize }}</span>
+                                </div>
+                                <!-- <div
+                                            *ngIf="supplierServiceForm?.controls?.emailReceiver?.errors?.pattern && !emailTb.pristine">
+                                            <span
+                                                class="form-text text-danger text-left">{{
+                                                'Email không hợp lệ' |
+                                                localize
+                                                }}</span>
+                                        </div> -->
+                            </div>
+                            <div class="col-md-1 col-sm-12 col-12">
+                                <input
+                                    (change)="changeInputIsEmailFromSupplier()"
+                                    [(ngModel)]="supplierServiceDto.isEmailFromSupplier"
+                                    class="form-check-input" type="checkbox"
+                                    name="isEmailFromSupplier"
+                                    id="isEmailFromSupplier">
+                            </div>
+                            <div class="col-md-3 col-sm-12 col-12">
+                                <label class="form-label">{{ 'Sử dụng email NCC'
+                                    |
+                                    localize }}</label>
+                            </div>
+
+                        </div>
+                        <div class="row mb-5 align-items-center">
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <label class="form-label">{{ 'Email template ' |
+                                    localize }}</label>
+                                <span style="color: red;"> *</span>
+                            </div>
+                            <div class="col-md-4 col-sm-12 col-12">
+                                <!-- <select
+                                    [(ngModel)]="supplierServiceDto.emailSendTemplateId"
+                                    class="form-control"
+                                    name="emailSendTemplateId">
+                                    <option
+                                        *ngFor="let item of serviceService.emailTemplates"
+                                        [ngValue]="item.id">{{item.emailTemplateName}}</option>
+                                </select> -->
+
+                                <p-dropdown
+                                    [options]="serviceService.emailTemplates"
+                                    [(ngModel)]="supplierServiceDto.emailSendTemplateId"
+                                    [filter]="true"
+                                    optionLabel="emailTemplateName"
+                                    optionValue="id"
+                                    placeholder="Chọn mẫu email"
+                                    name="emailSendTemplateId"
+                                    required
+                                    #emailSendTemplateId="ngModel">
+                                </p-dropdown>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- <div class="row mb-5 align-items-center" *ngIf="sendEmailChecked">
+                        <div class="col-md-1 col-sm-12 col-12">
+                            <input
+                                [(ngModel)]="supplierServiceDto.isSendEmailMatch"
+                                class="form-check-input" type="checkbox"
+                                name="isSendSuccessMail"
+                                id="isSendSuccessMail">
+                        </div>
+                        <div class="col-md-3 col-sm-12 col-12">
+                            <label class="form-label">{{ 'Gửi email khi khớp' |
+                                localize }}</label>
+                        </div>
+                        <div class="col-md-1 col-sm-12 col-12">
+                            <input class="form-check-input" type="checkbox"
+                                [(ngModel)]="supplierServiceDto.isSendEmailFalse"
+                                name="isSendFailMail"
+                                id="isSendFailMail">
+                        </div>
+                        <div class="col-md-3 col-sm-12 col-12">
+                            <label class="form-label">{{
+                                'Gửi email khi lệch' |
+                                localize }}</label>
+                        </div>
+
+                    </div> -->
+                </div>
+                <div class="modal-footer">
+                    <button
+                        [disabled]="saving"
+                        type="button"
+                        class="btn btn-light-primary fw-bold"
+                        (click)="close()">
+                        {{ 'Cancel' | localize }}
+                    </button>
+                    <button
+                        type="submit"
+                        class="btn btn-primary fw-bold"
+                        [buttonBusy]="saving"
+                        [disabled]="!supplierServiceForm.form.valid || !invalidTemplates || invalidFileNameFormat">
+                        <i class="fa fa-save"></i>
+                        <span>{{ 'Save' | localize }}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

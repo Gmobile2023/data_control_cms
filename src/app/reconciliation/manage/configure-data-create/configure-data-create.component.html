@@ -1,0 +1,600 @@
+<sub-header
+    [title]="'Nguồn lấy dữ liệu' | localize">
+</sub-header>
+
+<div [class]="containerClass">
+    <div class="card card-custom gutter-b">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <form #configSourceDataForm="ngForm"
+                    autocomplete="new-password">
+                    <div class="modal-body">
+                        <h4 class="mb-5">Cấu hình dữ
+                            liệu Giao
+                            dịch tài khoản chính</h4>
+                        <div class="row mb-5 align-items-center">
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <label class="form-label">{{
+                                    'Định dạng tên file lấy dữ liệu đối soát'
+                                    |
+                                    localize }} <span style="color: red;">*</span></label>
+                            </div>
+                            <div class="col-md-10 col-sm-12 col-12">
+                                <input
+                                    #serviceNameInput="ngModel"
+                                    id="fileNameGetDataBF1"
+                                    class="form-control"
+                                    type="text"
+                                    pattern="^(?!\s*$).+"
+                                    name="fileNameGetDataBF1"
+                                    required
+                                    maxlength="64"
+                                    [(ngModel)]="_manageService.dataService.fileNameGetDataBF1"
+                                    placeholder="Nhập tên dịch vụ"
+                                    pattern="^(?!\s*$).+" />
+                                <validation-messages
+                                    [formCtrl]="serviceNameInput"></validation-messages>
+                            </div>
+                        </div>
+
+                        <div class="row mb-5 align-items-center">
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <label class="form-label">{{
+                                    'Ngày lấy dữ liệu'
+                                    |
+                                    localize }} </label>
+                                <span style="color: red;"> *</span>
+                                <label class="form-label">{{ ' = {Date}   +'
+                                    |
+                                    localize }} </label>
+                            </div>
+
+                            <div class="col-md-2 col-sm-5 col-12">
+                                <input
+                                    [(ngModel)]="_manageService.dataService.dayAdditionalBF1" 
+                                    name="dayAdditionalBF1"
+                                    id="dayAdditionalBF1"
+                                    class="form-control"
+                                    type="number"
+                                    min="0"
+                                    #dayAdditionalBF1="ngModel"
+                                    required
+                                    onkeydown="javascript: return event.keyCode == 69 ? false : true"
+                                    />
+
+                                <validation-messages
+                                    [formCtrl]="dayAdditionalBF1"></validation-messages>
+                            </div>
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <span>ngày (số ngày lệch)</span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div
+                                class="col-md-6 col-sm-12 col-12 d-flex align-items-center"
+                                style="margin-bottom: 20px;">
+                                <input
+                                    type="radio"
+                                    id="useDataFromFtp"
+                                    name="UseDataFromBF1"
+                                    [checked]="_manageService.dataService.useDataFromFtpBF1"
+                                    [value]="2"
+                                    class="form-check-input"
+                                    (change)="onchangeRadiobf1(1)"
+                                    style="margin-right: 5px;" />
+                                <label for="useDataFromFtp"
+                                    class="form-label mb-0">{{
+                                    'Lấy dữ liệu từ ftp/sftp server' |
+                                    localize
+                                    }}</label>
+                            </div>
+                            <div
+                                *ngIf="_manageService.dataService.useDataFromFtpBF1">
+                                <div class="row mb-5 align-items-center">
+                                    <div class="col-md-2 col-sm-12 col-12">
+                                        <label class="form-label">{{
+                                            'Link dữ liệu lấy báo cáo' |
+                                            localize }} <span
+                                                style="color: red;">*</span></label>
+                                    </div>
+                                    <div class="col-md-10 col-sm-12 col-12">
+                                        <input
+                                            id="sourceDataLinkBF1"
+                                            #sourceDataLinkBF1="ngModel"
+                                            class="form-control"
+                                            type="url"
+                                            name="sourceDataLinkBF1"
+                                            required
+                                            [(ngModel)]="_manageService.dataService.sourceDataLinkBF1" />
+                                        <validation-messages
+                                            [formCtrl]="sourceDataLinkBF1"></validation-messages>
+                                    </div>
+                                </div>
+                                <div class="row mb-5 align-items-center">
+                                    <div class="col-md-2 col-sm-12 col-12">
+                                        <label class="form-label">{{
+                                            'Tài khoản'
+                                            |
+                                            localize }}</label>
+                                    </div>
+                                    <div class="col-md-4 col-sm-12 col-12">
+                                        <input
+                                            id="sourceDataAccountBF1"
+                                            #sourceDataAccountBF1
+                                            class="form-control"
+                                            type="text"
+                                            name="sourceDataAccountBF1"
+                                            [(ngModel)]="_manageService.dataService.sourceDataAccountBF1"
+                                            maxlength="64"
+                                            pattern="^[A-Za-z0-9_.]+$" />
+
+                                    </div>
+
+                                    <div class="col-md-2 col-sm-12 col-12">
+                                        <label class="form-label">{{
+                                            'Mật khẩu'
+                                            | localize }}</label>
+                                    </div>
+                                    <div class="col-md-4 col-sm-12 col-12">
+                                        <input
+                                            autocomplete="off"
+                                            id="sourceDataPasswordBF1"
+                                            #sourceDataPasswordBF1
+                                            class="form-control"
+                                            type="text"
+                                            name="sourceDataPasswordBF1"
+                                            [(ngModel)]="_manageService.dataService.sourceDataPasswordBF1"
+                                            maxlength="30"
+                                            minlength="6"
+                                            pattern="^(?![\s]{2,}).*$" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- email -->
+                        <div class="row">
+                            <div
+                                class="col-md-6 col-sm-12 col-12 d-flex align-items-center"
+                                style="margin-bottom: 20px;">
+                                <input
+                                    type="radio"
+                                    id="useDataFromEmailBF1"
+                                    name="UseDataFromBF1"
+                                    [checked]="_manageService.dataService.useDataFromEmailBF1"
+                                    [value]="2"
+                                    class="form-check-input"
+                                    (change)="onchangeRadiobf1(2)"
+                                    style="margin-right: 5px;" />
+                                <label for="UseDataFromEmail"
+                                    class="form-label mb-0">{{
+                                    'Lấy dữ liệu từ email' | localize }}</label>
+                            </div>
+                            <div
+                                *ngIf="_manageService.dataService.useDataFromEmailBF1">
+                                <div class="row mb-5 align-items-center">
+                                    <div class="col-md-2 col-sm-12 col-12">
+                                        <label class="form-label">{{
+                                            'Server' |
+                                            localize }} <span
+                                                style="color: red;">*</span></label>
+                                    </div>
+                                    <div class="col-md-10 col-sm-12 col-12">
+                                        <input
+                                            id="emailHostBF1"
+                                            #emailHostBF1="ngModel"
+                                            class="form-control"
+                                            type="url"
+                                            name="emailHostBF1"
+                                            [(ngModel)]="_manageService.dataService.emailHostBF1"
+                                            required />
+                                        <validation-messages
+                                            [formCtrl]="emailHostBF1"></validation-messages>
+                                    </div>
+                                </div>
+                                <div class="row mb-5 align-items-center">
+                                    <div class="col-md-2 col-sm-12 col-12">
+                                        <label class="form-label">
+                                            {{'Port' | localize }}
+                                            <span style="color: red;">*</span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-10 col-sm-12 col-12">
+                                        <input
+                                            id="emailPortBF1"
+                                            #emailPortBF1="ngModel"
+                                            class="form-control"
+                                            type="url"
+                                            name="emailPortBF1"
+                                            [(ngModel)]="_manageService.dataService.emailPortBF1"
+                                            required
+                                            pattern="^\s*\d+\s*$" />
+                                        <validation-messages
+                                            [formCtrl]="emailPortBF1"></validation-messages>
+                                    </div>
+                                </div>
+                                <div class="row mb-5 align-items-center">
+                                    <div class="col-md-2 col-sm-12 col-12">
+                                        <label class="form-label">{{
+                                            'Tài khoản'
+                                            |
+                                            localize }}</label>
+                                    </div>
+                                    <div class="col-md-4 col-sm-12 col-12">
+                                        <input
+                                            id="emailAccountBF1"
+                                            #emailAccountBF1
+                                            class="form-control"
+                                            type="text"
+                                            name="emailAccountBF1"
+                                            [(ngModel)]="_manageService.dataService.emailAccountBF1"
+                                            maxlength="64"
+                                            pattern="^[A-Za-z0-9_@.]+$" />
+
+                                    </div>
+
+                                    <div class="col-md-2 col-sm-12 col-12">
+                                        <label class="form-label">{{
+                                            'Mật khẩu'
+                                            |
+                                            localize }}</label>
+                                    </div>
+                                    <div class="col-md-4 col-sm-12 col-12">
+                                        <input
+                                            autocomplete="false"
+                                            id="emailPasswordBF1"
+                                            #emailPasswordBF1
+                                            class="form-control"
+                                            type="text"
+                                            name="emailPasswordBF1"
+                                            [(ngModel)]="_manageService.dataService.emailPasswordBF1"
+                                            minlength="6"
+                                            pattern="^(?![\s]{2,}).*$" />
+
+                                    </div>
+                                </div>
+                                <div class="row mb-5 align-items-center">
+                                    <div class="col-md-2 col-sm-12 col-12">
+                                        <label class="form-label">{{
+                                            'Tiêu đề chứa nội dung' |
+                                            localize
+                                            }}
+                                            <span style="color: red;">*</span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-10 col-sm-12 col-12">
+                                        <input
+                                            id="subjectEmailIdentifiedBF1"
+                                            #subjectEmailIdentifiedBF1="ngModel"
+                                            class="form-control"
+                                            type="text"
+                                            required
+                                            name="subjectEmailIdentifiedBF1"
+                                            [(ngModel)]="_manageService.dataService.subjectEmailIdentifiedBF1"
+                                            pattern="^(?!\s{2,}).*$" />
+                                        <validation-messages
+                                            [formCtrl]="subjectEmailIdentifiedBF1"></validation-messages>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- phần 2  -->
+
+                        <h4 class="mb-5">Cấu hình dữ liệu Chi
+                            tiết phát sinh cuộc gọi & SMS</h4>
+                        <div class="row mb-5 align-items-center">
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <label class="form-label">{{
+                                    'Định dạng tên file lấy dữ liệu đối soát'
+                                    |
+                                    localize }} <span style="color: red;">*</span></label>
+                            </div>
+                            <div class="col-md-10 col-sm-12 col-12">
+                                <input
+                                    #fileNameGetDataBF2="ngModel"
+                                    id="fileNameGetDataBF2"
+                                    class="form-control"
+                                    type="text"
+                                    pattern="^(?!\s*$).+"
+                                    name="fileNameGetDataBF2"
+                                    required
+                                    maxlength="64"
+                                    placeholder="Nhập tên dịch vụ"
+                                    pattern="^(?!\s*$).+"
+                                    [(ngModel)]="_manageService.dataService.fileNameGetDataBF2" />
+                                <validation-messages
+                                    [formCtrl]="fileNameGetDataBF2"></validation-messages>
+
+                            </div>
+                        </div>
+
+                        <div class="row mb-5 align-items-center">
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <label class="form-label">{{
+                                    'Ngày lấy dữ liệu'
+                                    |
+                                    localize }} </label>
+                                <span style="color: red;"> *</span>
+                                <label class="form-label">{{ ' = {Date}   +'
+                                    |
+                                    localize }} </label>
+                            </div>
+
+                            <div class="col-md-2 col-sm-5 col-12">
+                                <input
+                                    [(ngModel)]="_manageService.dataService.dayAdditionalBF2"
+                                    name="dayAdditionalBF2"
+                                    id="dayAdditionalBF2"
+                                    class="form-control"
+                                    type="number"
+                                    required
+                                    #dayAdditionalBF2="ngModel"
+                                    min="0" 
+                                    onkeydown="javascript: return event.keyCode == 69 ? false : true"
+                                    />
+
+                                <validation-messages
+                                    [formCtrl]="dayAdditionalBF2"></validation-messages>
+                            </div>
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <span>ngày (số ngày lệch)</span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div
+                                class="col-md-6 col-sm-12 col-12 d-flex align-items-center"
+                                style="margin-bottom: 20px;">
+                                <div class="p-field-radiobutton">
+                                    <input
+                                        type="radio"
+                                        id="useDataFromFtpBF2"
+                                        name="useDataFromBF2"
+                                        [checked]="_manageService.dataService.useDataFromFtpBF2"
+                                        value="2"
+                                        class="form-check-input"
+                                        (change)="onchangeRadiobf2(1)"
+                                        style="margin-right: 5px;" />
+
+                                </div>
+
+                                <label for="useDataFromFtp"
+                                    class="form-label mb-0">{{
+                                    'Lấy dữ liệu từ ftp/sftp server' |
+                                    localize
+                                    }}</label>
+                            </div>
+                            <div
+                                *ngIf="_manageService.dataService.useDataFromFtpBF2">
+                                <div class="row mb-5 align-items-center">
+                                    <div class="col-md-2 col-sm-12 col-12">
+                                        <label class="form-label">{{
+                                            'Link dữ liệu lấy báo cáo' |
+                                            localize }} <span
+                                                style="color: red;">*</span></label>
+                                    </div>
+                                    <div class="col-md-10 col-sm-12 col-12">
+                                        <input
+                                            id="sourceDataLinkBF2"
+                                            #sourceDataLinkBF2="ngModel"
+                                            class="form-control"
+                                            type="url"
+                                            name="sourceDataLinkBF2"
+                                            required
+                                           
+                                            [(ngModel)]="_manageService.dataService.sourceDataLinkBF2" />
+                                        <validation-messages
+                                            [formCtrl]="sourceDataLinkBF2"></validation-messages>
+                                    </div>
+                                </div>
+                                <div class="row mb-5 align-items-center">
+                                    <div class="col-md-2 col-sm-12 col-12">
+                                        <label class="form-label">{{
+                                            'Tài khoản'
+                                            |
+                                            localize }}</label>
+                                    </div>
+                                    <div class="col-md-4 col-sm-12 col-12">
+                                        <input
+                                            id="sourceDataAccountBF2"
+                                            #sourceDataAccountBF2
+                                            class="form-control"
+                                            type="text"
+                                            name="sourceDataAccountBF2"
+                                            [(ngModel)]="_manageService.dataService.sourceDataAccountBF2"
+                                            maxlength="64"
+                                            pattern="^[A-Za-z0-9_.]+$" />
+
+                                    </div>
+
+                                    <div class="col-md-2 col-sm-12 col-12">
+                                        <label class="form-label">{{
+                                            'Mật khẩu'
+                                            | localize }}</label>
+                                    </div>
+                                    <div class="col-md-4 col-sm-12 col-12">
+                                        <input
+                                            autocomplete="off"
+                                            id="sourceDataPasswordBF2"
+                                            #sourceDataPasswordBF2
+                                            class="form-control"
+                                            type="text"
+                                            name="sourceDataPasswordBF2"
+                                            [(ngModel)]="_manageService.dataService.sourceDataPasswordBF2"
+                                            maxlength="30"
+                                            minlength="6"
+                                            pattern="^(?![\s]{2,}).*$" />
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- email -->
+                        <div class="row">
+                            <div
+                                class="col-md-6 col-sm-12 col-12 d-flex align-items-center"
+                                style="margin-bottom: 20px;">
+                                <input
+                                    type="radio"
+                                    id="useDataFromEmailBF2"
+                                    name="useDataFromBF2"
+                                    [checked]="_manageService.dataService.useDataFromEmailBF2"
+                                    [value]="2"
+                                    class="form-check-input"
+                                    (change)="onchangeRadiobf2(2)"
+                                    style="margin-right: 5px;" />
+                                <label for="UseDataFromEmail"
+                                    class="form-label mb-0">{{
+                                    'Lấy dữ liệu từ email' | localize }}</label>
+                            </div>
+                            <div
+                                *ngIf="_manageService.dataService.useDataFromEmailBF2">
+                                <div class="row mb-5 align-items-center">
+                                    <div class="col-md-2 col-sm-12 col-12">
+                                        <label class="form-label">{{
+                                            'Server' |
+                                            localize }} <span
+                                                style="color: red;">*</span></label>
+                                    </div>
+                                    <div class="col-md-10 col-sm-12 col-12">
+                                        <input
+                                            id="emailHostBF2"
+                                            #emailHostBF2="ngModel"
+                                            class="form-control"
+                                            type="url"
+                                            name="emailHostBF2"
+                                            [(ngModel)]="_manageService.dataService.emailHostBF2"
+                                            required />
+                                        <validation-messages
+                                            [formCtrl]="emailHostBF2"></validation-messages>
+                                    </div>
+                                </div>
+                                <div class="row mb-5 align-items-center">
+                                    <div class="col-md-2 col-sm-12 col-12">
+                                        <label class="form-label">
+                                            {{'Port' | localize }}
+                                            <span style="color: red;">*</span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-10 col-sm-12 col-12">
+                                        <input
+                                            id="emailPortBF2"
+                                            #emailPortBF2="ngModel"
+                                            class="form-control"
+                                            type="url"
+                                            name="emailPortBF2"
+                                            [(ngModel)]="_manageService.dataService.emailPortBF2"
+                                            required
+                                            pattern="^\s*\d+\s*$" />
+                                        <validation-messages
+                                            [formCtrl]="emailPortBF2"></validation-messages>
+                                    </div>
+                                </div>
+                                <div class="row mb-5 align-items-center">
+                                    <div class="col-md-2 col-sm-12 col-12">
+                                        <label class="form-label">{{
+                                            'Tài khoản'
+                                            |
+                                            localize }}</label>
+                                    </div>
+                                    <div class="col-md-4 col-sm-12 col-12">
+                                        <input
+                                            id="emailAccountBF2"
+                                            #emailAccountBF2
+                                            class="form-control"
+                                            type="text"
+                                            name="emailAccountBF2"
+                                            [(ngModel)]="_manageService.dataService.emailAccountBF2"
+                                            maxlength="64"
+                                            pattern="^[A-Za-z0-9_@.]+$" />
+
+                                    </div>
+
+                                    <div class="col-md-2 col-sm-12 col-12">
+                                        <label class="form-label">{{
+                                            'Mật khẩu'
+                                            |
+                                            localize }}</label>
+                                    </div>
+                                    <div class="col-md-4 col-sm-12 col-12">
+                                        <input
+                                            autocomplete="false"
+                                            id="emailPasswordBF2"
+                                            #emailPasswordBF2
+                                            class="form-control"
+                                            type="text"
+                                            name="emailPasswordBF2"
+                                            [(ngModel)]="_manageService.dataService.emailPasswordBF2"
+                                            minlength="6"
+                                            pattern="^(?![\s]{2,}).*$" />
+
+                                    </div>
+                                </div>
+                                <div class="row mb-5 align-items-center">
+                                    <div class="col-md-2 col-sm-12 col-12">
+                                        <label class="form-label">{{
+                                            'Tiêu đề chứa nội dung' |
+                                            localize
+                                            }}
+                                            <span style="color: red;">*</span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-10 col-sm-12 col-12">
+                                        <input
+                                            id="subjectEmailIdentifiedBF2"
+                                            #subjectEmailIdentifiedBF2="ngModel"
+                                            class="form-control"
+                                            type="text"
+                                            required
+                                            name="subjectEmailIdentifiedBF2"
+                                            [(ngModel)]="_manageService.dataService.subjectEmailIdentifiedBF2"
+                                            pattern="^(?!\s{2,}).*$" />
+                                        <validation-messages
+                                            [formCtrl]="subjectEmailIdentifiedBF2"></validation-messages>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div>
+                        <button
+                            [routerLink]="['/app/reconciliation/configureData/create']"
+                            type="button"
+                            class="btn btn-primary fw-bold"
+                            [disabled]="!configSourceDataForm.form.valid">
+                            <span>{{ 'Về bước trước' | localize }}</span>
+                        </button>
+                        <!-- <button
+                                (click)="cancel()"
+                                type="button"
+                                class="btn btn-light-primary fw-bold">
+                                <span>{{ 'Hủy bỏ' | localize }}</span>
+                            </button> -->
+                        <button
+                            [disabled]="!configSourceDataForm.form.valid"
+                            [routerLink]="['/app/reconciliation/configureData/PostControlreport']"
+                            type="button"
+                            class="btn btn-primary fw-bold">
+                            <span>{{ 'Cấu hình báo cáo sau đối soát' | localize
+                                }}</span>
+                        </button>
+                        <button
+                        *ngIf="'Pages.Administration.RevenueControl.Create' | permission"
+                            [buttonBusy]="_manageService.saving"
+                            [disabled]="!configSourceDataForm.form.valid"
+                            type="button"
+                            (click)="complete()"
+                            class="btn btn-success fw-bold">
+                            <i class="fa fa-save"></i>
+                            <span>{{ 'Lưu cấu hình' | localize }}</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

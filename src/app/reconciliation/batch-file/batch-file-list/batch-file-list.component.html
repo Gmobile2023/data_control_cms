@@ -1,0 +1,169 @@
+<div [@routerTransition]>
+    <sub-header [title]="'Danh sách mẫu BF và nguồn dữ liệu' | localize">
+        <div role="actions">
+            <button
+                class="btn btn-primary float-end"
+                (click)="openCreateModal()"
+                class="btn btn-primary float-end">
+                <i class="fa fa-plus btn-md-icon"></i>
+                <span class="d-none d-md-inline-block">
+                    {{ 'Tạo mới' | localize }}
+                </span>
+            </button>
+        </div>
+    </sub-header>
+
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <form class="form" autocomplete="new-password">
+                    <div>
+                        <div class="row align-items-center mb-5">
+                            <div class="col-md-9 col-xl-9 col-sm-12">
+                                <div class="m-form__group align-items-center">
+                                    <div class="input-group">
+                                        <input
+                                            [(ngModel)]="filterText"
+                                            name="filterText"
+                                            autoFocus
+                                            class="form-control m-input"
+                                            placeholder="Tên mẫu bf"
+                                            type="text" />
+                                        <button (click)="getBatchFiles()"
+                                            class="btn btn-primary"
+                                            type="submit">
+                                            <i class="flaticon-search-1"
+                                                [attr.aria-label]="l('Search')"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+                <div class="row align-items-center">
+                    <div class="primeng-datatable-container">
+                        <p-table [value]="items"
+                            [tableStyle]="{ 'min-width': '50rem' }">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Tên nguồn dữ liệu</th>
+                                    <th>Link</th>
+                                    <th>Tên mẫu BF</th>
+                                    <th>Mã mẫu BF</th>
+                                    <th>Mô tả</th>
+                                    <th
+                                        style="min-width: 130px"
+                                        [hidden]="
+                                            !(
+                                                [
+                                                    'Pages.Administration.BatchFile.Edit',
+                                                    'Pages.Administration.BatchFile'
+                                                ] | permissionAny
+                                            )
+                                        ">
+                                        {{ 'Actions' | localize }}
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-product let-rowIndex="rowIndex">
+                                <tr>
+                                    <td>{{ rowIndex + 1 }}</td>
+                                    <td>{{ product.SourceDataName }}</td>
+                                    <td><a target="_blank" [href]="product.SourceDataLink">Truy cập</a></td>
+                                    <td>{{ product.FileName }}</td>
+                                    <td>{{ product.FileCode }}</td>
+                                    <td>{{ product.Description }}</td>
+                                    <td
+                                        style="min-width: 130px"
+                                        [hidden]="
+                                        !(
+                                            [
+                                            'Pages.Administration.BatchFile.Edit',
+                                            'Pages.Administration.BatchFile.Detail'
+                                            ] | permissionAny
+                                        )
+                                    ">
+                                        <div class="btn-group" dropdown
+                                            placement="bottom left"
+                                            container="body">
+                                            <button
+                                                id="dropdownButton"
+                                                type="button"
+                                                class="btn btn-primary btn-sm dropdown-toggle"
+                                                dropdownToggle
+                                                aria-controls="dropdownMenu">
+                                                <i class="fa fa-cog"></i>
+                                                <span class="caret"></span>
+                                                {{ 'Actions' | localize }}
+                                            </button>
+                                            <ul
+                                                id="dropdownMenu"
+                                                class="dropdown-menu"
+                                                role="menu"
+                                                *dropdownMenu
+                                                aria-labelledby="dropdownButton">
+
+                                                <li
+                                                    *ngIf="'Pages.Administration.BatchFile.Edit' | permission"
+                                                    role="menuitem">
+                                                    <a
+                                                        href="javascript:;"
+                                                        class="dropdown-item"
+                                                        (click)="navigateUpdate(product.BatchFileId)"
+                                                        >
+                                                        {{ 'Chỉnh sửa' |
+                                                        localize }}
+                                                    </a>
+                                                </li>
+
+                                                <!-- <li
+                                                    *ngIf="'Pages.Administration.BatchFile' | permission"
+                                                    role="menuitem">
+                                                    <a
+                                                        href="javascript:;"
+                                                        class="dropdown-item"
+                                                        (click)="navigateDetail(product.BatchFileId)"
+                                                        >
+                                                        {{ 'Chi tiết' | localize }}
+                                                    </a>
+                                                </li> -->
+                                                <li
+                                                    *ngIf="'Pages.Administration.BatchFile.Delete' | permission"
+                                                    role="menuitem">
+                                                    <a
+                                                        href="javascript:;"
+                                                        class="dropdown-item"
+                                                        (click)="deleteBatchFile(product)"
+                                                        >
+                                                        {{ 'Xóa' | localize }}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <div class="primeng-no-data text-center mt-2" *ngIf="paginator.total == 0">
+                            {{ 'NoData' | localize }}
+                        </div>
+                        <div class="mt-3" *ngIf="paginator.total > 0">
+                            <p-paginator (onPageChange)="onPageChange($event)"
+                                [rows]="paginator.pageSize"
+                                [totalRecords]="paginator.total"
+                                [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <batch-file-create #createBatchFileModal (getBatchFile)="getBatchFiles()"></batch-file-create>
+    <batch-file-update #updateBatchFileModal (getBatchFile)="getBatchFiles()"></batch-file-update>
+
+
+</div>

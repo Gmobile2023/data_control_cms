@@ -1,0 +1,53 @@
+<div
+    appBsModal
+    #createOrEditModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="createOrEditModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static' }">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <span>Danh sách file</span>
+                </h4>
+                <button
+                    type="button"
+                    class="btn-close"
+                    (click)="close()">
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- <div *ngFor="let item of datas">
+                         <a [href]="item" target="_blank">{{getFileName(item)}}</a>   
+                    </div> -->
+                <p-panel *ngFor="let item of datas, let i = index"
+                    [header]="item.serviceName" [toggleable]="true">
+                    <table class="table">
+                        <tr *ngFor="let file of item.listFile">
+                            <th>
+                                <!-- <a [href]="file.fileName"
+                                    target="_blank">{{getFileName(file.fileName)}}</a> -->
+                                
+                                <span (click)="getFile(file.serviceId, file.fileName)" class="link-file">{{getFileName(file.fileName)}}</span>
+                            </th>
+                            <th class="text-right">{{file.createTime | date:"dd/MM/yyyy HH:mm" }}</th>
+                        </tr>
+                    </table>
+
+                </p-panel>
+            </div>
+            <div class="modal-footer">
+                <button
+                    type="button"
+                    class="btn btn-light-primary fw-bold"
+                    (click)="close()">
+                    {{ 'Cancel' | localize }}
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>

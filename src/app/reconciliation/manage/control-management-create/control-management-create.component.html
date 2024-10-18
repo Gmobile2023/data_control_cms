@@ -1,0 +1,308 @@
+<div [@routerTransition]>
+    <sub-header *ngIf="!packOfData.id"
+        [title]="'Thêm mới dịch vụ đối soát' | localize">
+    </sub-header>
+    <sub-header *ngIf="packOfData.id"
+        [title]="'Cập nhật dịch vụ đối soát' | localize">
+    </sub-header>
+
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <form #createControlManagementForm="ngForm"
+                        autocomplete="new-password">
+                        <div class="row mb-5 align-items-center">
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <label class="form-label">{{ 'Tên cấu hình'
+                                    |
+                                    localize }} <span style="color: red;">*</span></label>
+                            </div>
+                            <div class="col-md-10 col-sm-12 col-12">
+                                <input
+                                    [(ngModel)]="_manageService.dataService.name"
+                                    id="name"
+                                    class="form-control"
+                                    type="text"
+                                    pattern="^(?!\s*$).+"
+                                    name="name"
+                                    required
+                                    #name="ngModel"
+                                    maxlength="64"
+                                    placeholder="Nhập tên cấu hình"
+                                    pattern="^(?!\s*$).+" />
+
+                                <validation-messages [formCtrl]="name"></validation-messages>
+                            </div>
+                        </div>
+                        <div class="row mb-5 align-items-center">
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <label class="form-label">{{ 'Mã cấu hình'
+                                    |
+                                    localize }} <span style="color: red;">*</span></label>
+                            </div>
+                            <div class="col-md-10 col-sm-12 col-12">
+                                <input
+                                    [(ngModel)]="_manageService.dataService.code"
+                                    id="code"
+                                    class="form-control"
+                                    type="text"
+                                    name="code"
+                                    required
+                                    maxlength="64"
+                                    #code="ngModel"
+                                    placeholder="Nhập mã cấu hình"
+                                    pattern="^(?!\s*$).+" />
+
+                                <validation-messages [formCtrl]="code"></validation-messages>
+                            </div>
+                        </div>
+                        <div class="row mb-5 align-items-center">
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <label class="form-label">{{ 'Chu kỳ đối soát' |
+                                    localize }}</label>
+                                <span style="color: red;"> *</span>
+                            </div>
+                            <div class="col-md-3 col-sm-12 col-12">
+                                <select
+                                    [(ngModel)]="_manageService.dataService.cycleReconcile"
+                                    id="cycle"
+                                    class="form-control"
+                                    type="text"
+                                    name="cycle"
+                                    required
+                                    #cycleReconcile="ngModel"
+                                    maxlength="64">
+                                    <option value="1">Daily</option>
+                                    <option value="2">Weekly</option>
+                                    <option value="3">Monthly</option>
+                                </select>
+                                <validation-messages [formCtrl]="cycleReconcile"></validation-messages>
+                            </div>
+                        </div>
+
+                        <div class="row mb-5 align-items-center">
+                            <div class="col-md-2 col-sm-12 col-12 ">
+                                <label class="form-label">{{
+                                    'Thời gian đối soát' |
+                                    localize }} </label>
+                                <span style="color: red;"> *</span>
+                            </div>
+                            <div class="col-md-2 col-sm-12 col-12 my-custom">
+                                <p-calendar
+                                    [(ngModel)]="_manageService.dataService.hours"
+                                    [showTime]="true"
+                                    [timeOnly]="true"
+                                    #timeValue="ngModel"
+                                    name="timeValue"
+                                    required>
+                                </p-calendar>
+                                <validation-messages [formCtrl]="timeValue"></validation-messages>
+                            </div>
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <select
+                                    [(ngModel)]="_manageService.dataService.dayReconcile"
+                                    name="weekday"
+                                    id="weekday"
+                                    class="form-control"
+                                    *ngIf="_manageService.dataService.cycleReconcile == 2">
+                                    <option
+                                        *ngFor="let item of _manageService.lstWeekDays"
+                                        [ngValue]="item.value">{{item.text}}</option>
+                                </select>
+
+                                <select
+                                    [(ngModel)]="_manageService.dataService.dayReconcile"
+                                    name="dayOfMonth"
+                                    id="dayOfMonth"
+                                    class="form-control"
+                                    *ngIf="_manageService.dataService.cycleReconcile == 3">
+                                    <option
+                                        *ngFor="let item of _manageService.lstMonthDays"
+                                        [ngValue]="item.value">{{item.text}}</option>
+                                </select>
+
+                            </div>
+                        </div>
+
+                        <!-- <div class="row mb-5 align-items-center">
+                            <div class="col-md-2 col-sm-12 col-12 ">
+                                <label class="form-label">{{
+                                    'Trạng thái' |
+                                    localize }} </label>
+                                <span style="color: red;"> *</span>
+                            </div>
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <label class="switch">
+                                    <input
+                                        name="active"
+                                        [(ngModel)]="_manageService.dataService.active"
+                                        type="checkbox"
+                                        >
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                            
+                        </div> -->
+                        <h5 class="mb-5">Thông tin gói cước</h5>
+                        <div class="row mb-5 align-items-center">
+                            <div class="col-md-2 col-sm-12 col-12 mb-5">
+                                <p-fileUpload
+                                    mode="basic"
+                                    customUpload="true"
+                                    name="ExcelFileUpload"
+                                    #ExcelFilePackOfDataUpload
+                                    maxFileSize="10000000"
+                                    auto="auto"
+                                    accept=".csv,.xls,.xlsx"
+                                    (uploadHandler)="uploadPackOfData($event)"
+                                    (onError)="onUploadExcelError()"
+                                    chooseLabel="{{ 'Upload file mẫu' | localize }}">
+                                </p-fileUpload>
+                            </div>
+                            <div class="col-md-2 col-sm-12 col-12 mb-5">
+                                <button (click)="downloadTemplaetPOD()" class="p-ripple p-element p-button p-component p-fileupload-choose">Tải mẫu</button>
+                            </div>
+                            <h5 class="mb-5">Danh sách gói cước</h5>
+                            <p-table
+                                [columns]="templatePackOfDate"
+                                [value]="_manageService.dataService.packOfDataDtos"
+                                [tableStyle]="{ 'min-width': '50rem' }">
+                                <ng-template pTemplate="header" let-columns>
+                                    <tr>
+                                        <th *ngFor="let col of columns">
+                                            {{ col }}
+                                        </th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+                                    <tr>
+                                        <td>{{rowIndex + 1}}</td>
+                                        <td>{{item.code}}</td>
+                                        <td>{{item.name}}</td>
+                                        <td>{{item.price}}</td>
+                                        <td>{{item.cycleValue}}</td>
+                                        <td></td>
+                                        <td>{{item.flowCallInternal}}</td>
+                                        <td>{{item.flowCallOutside}}</td>
+                                        <td>{{item.flowSmsInternal}}</td>
+                                        <td>{{item.flowSmsOutside}}</td>
+                                        <td>{{item.flowData}}</td>
+                                        <td>{{item.priceSmsInternal}}</td>
+                                        <td>{{item.priceSmsOutside}}</td>
+                                        <td>{{item.priceCallInternal}}</td>
+                                        <td>{{item.priceCallOutside}}</td>
+                                        <td>{{item.priceData}}</td>
+                                        <td>
+                                            <input type="radio" 
+                                            class="form-check-input"
+                                            name="isBasic"
+                                            [checked]="item.isBasic"
+                                            (change)="ChoseIsBasic(rowIndex)"/>
+                                        </td>
+                                        <td>
+                                            <label class="switch">
+                                                <input
+                                                    [name]="'activePod' + rowIndex"
+                                                    [(ngModel)]="item.active"
+                                                    [checked]="item.active"
+                                                    type="checkbox"
+                                                    >
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                        <div class="row mb-5 align-items-center">
+
+                            <h5 class="mb-5">Thông tin đầu số nội mạng</h5>
+
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <p-fileUpload
+                                    mode="basic"
+                                    customUpload="true"
+                                    name="ExcelFileInternalNumberUpload"
+                                    #ExcelFileInternalNumberUpload
+                                    maxFileSize="10000000"
+                                    auto="auto"
+                                    accept=".csv,.xls,.xlsx"
+                                    (uploadHandler)="uploadInternalNumber($event)"
+                                    (onError)="onUploadExcelError()"
+                                    chooseLabel="{{ 'Upload file mẫu' | localize }}">
+                                </p-fileUpload>
+
+                            </div>
+
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <button (click)="downloaddownloadTemplaetInternalNumber()" class="p-ripple p-element p-button p-component p-fileupload-choose">Tải mẫu</button>
+                            </div>
+                        </div>
+                        <h5 class="mb-5">Danh sách đầu số nội mạng</h5>
+                        <div class="row mb-5 align-items-center">
+                            <div class="primeng-datatable-container">
+                                <p-table
+                                    [value]="_manageService.dataService.internalNetworkNumberDtos"
+                                    [tableStyle]="{ 'min-width': '50rem' }">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Đầu số</th>
+                                            <th>Tên nhà mạng</th>
+                                            <th>Mã nhà mạng</th>
+                                            <th>Trạng thái</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+                                        <tr>
+                                            <td>{{rowIndex + 1}}</td>
+                                            <td>{{ item.numberPrefix }}</td>
+                                            <td>{{ item.providerName }}</td>
+                                            <td>{{ item.providerCode }}</td>
+                                            <td>
+                                                <label class="switch">
+                                                    <input
+                                                        [name]="'active' + rowIndex"
+                                                        [(ngModel)]="item.active"
+                                                        type="checkbox"
+                                                        >
+                                                    <span class="slider round"></span>
+                                                </label>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                        <button
+                            [buttonBusy]="_manageService.saving"
+                            type="button"
+                            (click)="complete()"
+                            class="btn btn-success fw-bold"
+                            [disabled]="!createControlManagementForm.form.valid"
+                            *ngIf="'Pages.Administration.RevenueControl.Create' | permission"
+                            >
+                            <i class="fa fa-save"></i>
+                            <span>{{ 'Lưu cấu hình' | localize }}</span>
+                        </button>
+                        <!-- <button
+                            (click)="cancel()"
+                            type="button"
+                            class="btn btn-light-primary fw-bold">
+                            <span>{{ 'Hủy bỏ' | localize }}</span>
+                        </button> -->
+                        <button
+                            [routerLink]="['/app/reconciliation/configureData/config-datasource']"
+                            type="button"
+                            class="btn btn-primary fw-bold"
+                            [disabled]="!createControlManagementForm.form.valid"
+                            >
+                            <span>{{ 'Cấu hình dữ liệu đầu vào' | localize
+                                }}</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>

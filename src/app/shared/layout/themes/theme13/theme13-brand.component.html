@@ -1,0 +1,10 @@
+
+    <a href="/" [class]="anchorClass">
+        <img
+            class="bg-white rounded-circle"
+            alt="Logo"
+            *ngIf="!appSession.tenant || !appSession.tenant.HasLogo()"
+            [src]="defaultLogo"
+            [class]="imageClass"
+        />
+    </a>

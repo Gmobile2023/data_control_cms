@@ -1,0 +1,454 @@
+<div [@routerTransition]>
+    <sub-header
+        [title]="'Thêm mới báo cáo đối soát' | localize">
+    </sub-header>
+
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <div class="row align-items-center mx-3">
+                    <form #serviceCreateForm="ngForm"
+                        autocomplete="new-password">
+                        <div class="modal-body">
+                            <div class="row mb-5 align-items-center">
+                                <div class="col-md-3 col-sm-12 col-12">
+                                    <label class="form-label">{{ 'Tên báo cáo' |
+                                        localize }}</label>
+                                    <span style="color: red;"> *</span>
+                                </div>
+                                <div class="col-md-4 col-sm-12 col-12">
+                                    <input
+                                        [(ngModel)]="nhaptenbc"
+                                        id=""
+                                        #emailtb="ngModel"
+                                        class="form-control"
+                                        type="text"
+                                        name=""
+                                        required
+                                        placeholder="Nhập tên báo cáo" />
+                                    <!-- <div
+                                        *ngIf="serviceCreateForm?.controls?.receiverMail?.errors?.required && !emailtb.pristine">
+                                        <span
+                                            class="form-text text-danger text-left">{{
+                                            'Trường này là bắt buộc' |
+                                            localize }}</span>
+                                    </div> -->
+                                </div>
+                            </div>
+
+                            <div class="row mb-5 align-items-center">
+                                <div class="col-md-3 col-sm-12 col-12">
+                                    <label class="form-label">{{ 'Định dạng tên file xuất báo cáo' |
+                                        localize }}</label>
+                                    <span style="color: red;"> *</span>
+                                </div>
+                                <div class="col-md-4 col-sm-12 col-12">
+                                    <input
+                                        [(ngModel)]="nhaptenbc"
+                                        id=""
+                                        #emailtb="ngModel"
+                                        class="form-control"
+                                        type="text"
+                                        name=""
+                                        required
+                                        placeholder="Nhập định dạng tên file xuất báo cáo" />
+                                    <!-- <div
+                                        *ngIf="serviceCreateForm?.controls?.receiverMail?.errors?.required && !emailtb.pristine">
+                                        <span
+                                            class="form-text text-danger text-left">{{
+                                            'Trường này là bắt buộc' |
+                                            localize }}</span>
+                                    </div> -->
+                                </div>
+                            </div>
+
+                            <div>
+                                <p class="h4 mt-12 mb-3">Chọn trường tham chiếu BF Giao dịch tài khoản chính </p>
+                            </div>
+                            <div class="row mb-5 align-items-center">
+                                <div class="col-md-3 col-sm-12 col-12">
+                                    <label class="form-label">{{
+                                        'Bảng dữ liệu' |
+                                        localize }}</label>
+                                    <span style="color: red;"> *</span>
+                                </div>
+                                <div class="col-md-4 col-sm-12 col-12">
+                                    <p-dropdown
+                                        [options]=""
+                                        [(ngModel)]="bangdl"
+                                        [filter]="true"
+                                        optionLabel="emailTemplateName"
+                                        optionValue="id"
+                                        placeholder="Chọn bảng dữ liệu"
+                                        name="emailSendTemplateId"
+                                        required
+                                        #emailSendTemplateId="ngModel"
+                                        [style]="{'width':'100%'}">
+                                    </p-dropdown>
+                                    <validation-messages
+                                    [formCtrl]="emailSendTemplateId"></validation-messages>
+                                </div>
+                            </div>
+
+                            <div class="row mb-5 align-items-center">
+                                <div class="col-md-3 col-sm-12 col-12">
+                                    <label class="form-label">{{
+                                        'Trường dữ liệu' |
+                                        localize }}</label>
+                                    <span style="color: red;"> *</span>
+                                </div>
+                                <div class="col-md-4 col-sm-12 col-12">
+                                    <p-dropdown
+                                        [options]=""
+                                        [(ngModel)]="truongdl"
+                                        [filter]="true"
+                                        optionLabel="emailTemplateName"
+                                        optionValue="id"
+                                        placeholder="Chọn trường dữ liệu"
+                                        name="emailSendTemplateId"
+                                        required
+                                        #emailSendTemplateId="ngModel"
+                                        [style]="{'width':'100%'}">
+                                    </p-dropdown>
+                                    <validation-messages
+                                    [formCtrl]="emailSendTemplateId"></validation-messages>
+                                </div>
+                            </div>
+
+                            <div>
+                                <p class="h4 mt-12 mb-3">Chọn trường tham chiếu BF Chi tiết phát sinh cuộc gọi & SMS </p>
+                            </div>
+                            <div class="row mb-5 align-items-center">
+                                <div class="col-md-3 col-sm-12 col-12">
+                                    <label class="form-label">{{
+                                        'Bảng dữ liệu' |
+                                        localize }}</label>
+                                    <span style="color: red;"> *</span>
+                                </div>
+                                <div class="col-md-4 col-sm-12 col-12">
+                                    <p-dropdown
+                                        [options]=""
+                                        [(ngModel)]="bangdl"
+                                        [filter]="true"
+                                        optionLabel="emailTemplateName"
+                                        optionValue="id"
+                                        placeholder="Chọn bảng dữ liệu"
+                                        name="emailSendTemplateId"
+                                        required
+                                        #emailSendTemplateId="ngModel"
+                                        [style]="{'width':'100%'}">
+                                    </p-dropdown>
+                                    <validation-messages
+                                    [formCtrl]="emailSendTemplateId"></validation-messages>
+                                </div>
+                            </div>
+                            <div class="row mb-5 align-items-center">
+                                <div class="col-md-3 col-sm-12 col-12">
+                                    <label class="form-label">{{
+                                        'Trường dữ liệu' |
+                                        localize }}</label>
+                                    <span style="color: red;"> *</span>
+                                </div>
+                                <div class="col-md-4 col-sm-12 col-12">
+                                    <p-dropdown
+                                        [options]=""
+                                        [(ngModel)]="truongdl"
+                                        [filter]="true"
+                                        optionLabel="emailTemplateName"
+                                        optionValue="id"
+                                        placeholder="Chọn trường dữ liệu"
+                                        name="emailSendTemplateId"
+                                        required
+                                        #emailSendTemplateId="ngModel"
+                                        [style]="{'width':'100%'}">
+                                    </p-dropdown>
+                                    <validation-messages
+                                    [formCtrl]="emailSendTemplateId"></validation-messages>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <p class="h3 mt-12 mb-3">Cấu hình báo cáo</p>
+                            </div>
+                            <div class="row mb-5 align-items-center">
+                                <div class="col-md-3 col-sm-12 col-12">
+                                    <label class="form-label">{{ 'Tên cột chính' |
+                                        localize }}</label>
+                                    <span style="color: red;"> *</span>
+                                </div>
+                                <div class="col-md-4 col-sm-12 col-12">
+                                    <input
+                                        [(ngModel)]="nhapcotchinh"
+                                        id=""
+                                        #emailtb="ngModel"
+                                        class="form-control"
+                                        type="text"
+                                        name=""
+                                        required
+                                        placeholder="Nhập tên cột chính" />
+                                    <!-- <div
+                                        *ngIf="serviceCreateForm?.controls?.receiverMail?.errors?.required && !emailtb.pristine">
+                                        <span
+                                            class="form-text text-danger text-left">{{
+                                            'Trường này là bắt buộc' |
+                                            localize }}</span>
+                                    </div> -->
+                                </div>
+                            </div>
+                            <div class="row mb-5 align-items-center">
+                                <div class="col-md-3 col-sm-12 col-12">
+                                    <label class="form-label">{{ 'Tên cột phụ' |
+                                        localize }}</label>
+                                    <span style="color: red;"> *</span>
+                                </div>
+                                <div class="col-md-4 col-sm-12 col-12">
+                                    <input
+                                        [(ngModel)]="tencotphu"
+                                        id=""
+                                        #emailtb="ngModel"
+                                        class="form-control"
+                                        type="text"
+                                        name=""
+                                        required
+                                        placeholder="Nhập tên cột phụ" />
+                                    <!-- <div
+                                        *ngIf="serviceCreateForm?.controls?.receiverMail?.errors?.required && !emailtb.pristine">
+                                        <span
+                                            class="form-text text-danger text-left">{{
+                                            'Trường này là bắt buộc' |
+                                            localize }}</span>
+                                    </div> -->
+                                </div>
+                                <div class="col-md-2 col-sm-12 col-12 text-center">
+                                    <label class="form-label">{{ 'Thêm cột phụ' |
+                                        localize }}</label>
+                                </div>
+                                <div class="col-md-1 col-sm-12 col-12">
+                                    <label class="switch">
+                                        <input
+                                            [(ngModel)]="themcotphu"
+                                            type="checkbox"
+                                            (change)="updateStatus()">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row mb-5 align-items-center">
+                                <div class="col-md-3 col-sm-12 col-12">
+                                    <label class="form-label">{{
+                                        'Loại dữ liệu' |
+                                        localize }}</label>
+                                    <span style="color: red;"> *</span>
+                                </div>
+                                <div class="col-md-4 col-sm-12 col-12">
+                                    <p-dropdown
+                                        [options]=""
+                                        [(ngModel)]="loaidl"
+                                        [filter]="true"
+                                        optionLabel="emailTemplateName"
+                                        optionValue="id"
+                                        placeholder="Chọn loại dữ liệu"
+                                        name="emailSendTemplateId"
+                                        required
+                                        #emailSendTemplateId="ngModel"
+                                        [style]="{'width':'100%'}">
+                                    </p-dropdown>
+                                    <validation-messages
+                                    [formCtrl]="emailSendTemplateId"></validation-messages>
+                                </div>
+                            </div>
+
+                            <div>
+                                <p class="h4 mt-12 mb-3">Nguồn dữ liệu</p>
+                            </div>
+                            <div class="row mb-5 align-items-center">
+                                <div class="col-md-3 col-sm-12 col-12">
+                                    <label class="form-label">{{
+                                        'Chọn Hàm' |
+                                        localize }}</label>
+                                    <span style="color: red;"> *</span>
+                                </div>
+                                <div class="col-md-4 col-sm-12 col-12">
+                                    <p-dropdown
+                                        [options]=""
+                                        [(ngModel)]="chonham"
+                                        [filter]="true"
+                                        optionLabel="emailTemplateName"
+                                        optionValue="id"
+                                        placeholder="Chọn Hàm"
+                                        name="emailSendTemplateId"
+                                        required
+                                        #emailSendTemplateId="ngModel"
+                                        [style]="{'width':'100%'}">
+                                    </p-dropdown>
+                                    <validation-messages
+                                    [formCtrl]="emailSendTemplateId"></validation-messages>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="h5 mt-12 mb-3">Trường dữ liệu</p>
+                            </div>
+                            <div class="row mb-5 align-items-center">
+                                <div class="col-md-3 col-sm-12 col-12">
+                                    <label class="form-label">{{
+                                        'Bảng dữ liệu' |
+                                        localize }}</label>
+                                    <span style="color: red;"> *</span>
+                                </div>
+                                <div class="col-md-4 col-sm-12 col-12">
+                                    <p-dropdown
+                                        [options]=""
+                                        [(ngModel)]="chonham"
+                                        [filter]="true"
+                                        optionLabel="emailTemplateName"
+                                        optionValue="id"
+                                        placeholder="Chọn Hàm"
+                                        name="emailSendTemplateId"
+                                        required
+                                        #emailSendTemplateId="ngModel"
+                                        [style]="{'width':'100%'}">
+                                    </p-dropdown>
+                                    <validation-messages
+                                    [formCtrl]="emailSendTemplateId"></validation-messages>
+                                </div>
+                            </div>
+                            <div class="row mb-5 align-items-center">
+                                <div class="col-md-3 col-sm-12 col-12">
+                                    <label class="form-label">{{
+                                        'Trường dữ liệu' |
+                                        localize }}</label>
+                                    <span style="color: red;"> *</span>
+                                </div>
+                                <div class="col-md-4 col-sm-12 col-12">
+                                    <p-dropdown
+                                        [options]=""
+                                        [(ngModel)]="chonham"
+                                        [filter]="true"
+                                        optionLabel="emailTemplateName"
+                                        optionValue="id"
+                                        placeholder="Chọn Trường dữ liệu"
+                                        name="emailSendTemplateId"
+                                        required
+                                        #emailSendTemplateId="ngModel"
+                                        [style]="{'width':'100%'}">
+                                    </p-dropdown>
+                                    <validation-messages
+                                    [formCtrl]="emailSendTemplateId"></validation-messages>
+                                </div>
+                                <div class="col-md-2 col-sm-12 col-12 text-center">
+                                    <label class="form-label">{{ 'Thêm trường dữ liệu' |
+                                        localize }}</label>
+                                </div>
+                                <div class="col-md-1 col-sm-12 col-12">
+                                    <label class="switch">
+                                        <input
+                                            [(ngModel)]="themcotphu"
+                                            type="checkbox"
+                                            (change)="updateStatus()">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="h4 mt-12 mb-3">Dữ liệu đối soát</p>
+                            </div>
+                            <div class="row mb-5 align-items-center">
+                                <div class="col-md-3 col-sm-12 col-12">
+                                    <label class="form-label">{{
+                                        'Chọn hàm so sánh' |
+                                        localize }}</label>
+                                    <span style="color: red;"> *</span>
+                                </div>
+                                <div class="col-md-4 col-sm-12 col-12">
+                                    <p-dropdown
+                                        [options]=""
+                                        [(ngModel)]="chonham"
+                                        [filter]="true"
+                                        optionLabel="emailTemplateName"
+                                        optionValue="id"
+                                        placeholder="Chọn Hàm so sánh"
+                                        name="emailSendTemplateId"
+                                        required
+                                        #emailSendTemplateId="ngModel"
+                                        [style]="{'width':'100%'}">
+                                    </p-dropdown>
+                                    <validation-messages
+                                    [formCtrl]="emailSendTemplateId"></validation-messages>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="h5 mt-12 mb-3">Trường dữ liệu</p>
+                            </div>
+                            <div class="row mb-5 align-items-center">
+                                <div class="col-md-3 col-sm-12 col-12">
+                                    <label class="form-label">{{
+                                        'Bảng dữ liệu' |
+                                        localize }}</label>
+                                    <span style="color: red;"> *</span>
+                                </div>
+                                <div class="col-md-4 col-sm-12 col-12">
+                                    <p-dropdown
+                                        [options]=""
+                                        [(ngModel)]="chonham"
+                                        [filter]="true"
+                                        optionLabel="emailTemplateName"
+                                        optionValue="id"
+                                        placeholder="Chọn Bảng dữ liệu"
+                                        name="emailSendTemplateId"
+                                        required
+                                        #emailSendTemplateId="ngModel"
+                                        [style]="{'width':'100%'}">
+                                    </p-dropdown>
+                                    <validation-messages
+                                    [formCtrl]="emailSendTemplateId"></validation-messages>
+                                </div>
+                            </div>
+                            <div class="row mb-5 align-items-center">
+                                <div class="col-md-3 col-sm-12 col-12">
+                                    <label class="form-label">{{
+                                        'Trường dữ liệu' |
+                                        localize }}</label>
+                                    <span style="color: red;"> *</span>
+                                </div>
+                                <div class="col-md-4 col-sm-12 col-12">
+                                    <p-dropdown
+                                        [options]=""
+                                        [(ngModel)]="chonham"
+                                        [filter]="true"
+                                        optionLabel="emailTemplateName"
+                                        optionValue="id"
+                                        placeholder="Chọn Trường dữ liệu"
+                                        name="emailSendTemplateId"
+                                        required
+                                        #emailSendTemplateId="ngModel"
+                                        [style]="{'width':'100%'}">
+                                    </p-dropdown>
+                                    <validation-messages
+                                    [formCtrl]="emailSendTemplateId"></validation-messages>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-20">
+                            <button
+                                [routerLink]="['/app/reconciliation/managecustom/PostControlreport']"
+                                type="button"
+                                class="btn btn-primary fw-bold"
+                                [disabled]="">
+                                <span>{{ 'Hủy' | localize }}</span>
+                            </button>
+                            <button
+                                
+                                type="button"
+                                (click)="complete()"
+                                [disabled]=""
+                                class="btn btn-success fw-bold">
+                                <i class="fa fa-save"></i>
+                                <span>{{ 'Lưu cấu hình' | localize }}</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+     </div>
+</div>

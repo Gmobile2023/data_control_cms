@@ -1,0 +1,7 @@
+.tr-hover:hover{
+    background-color: #ccc;
+}
+.disabled-form {
+    opacity: 0.6; /* Làm mờ biểu mẫu khi không hoạt động */
+    pointer-events: none; /* Vô hiệu hóa tương tác với biểu mẫu khi không hoạt động */
+  }

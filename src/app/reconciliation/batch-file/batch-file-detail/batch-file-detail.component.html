@@ -1,0 +1,159 @@
+ <div appBsModal
+#createOrEditModal="bs-modal"
+class="modal fade"
+tabindex="-1"
+role="dialog"
+aria-labelledby="createOrEditModal"
+aria-hidden="true"
+[config]="{ backdrop: 'static', keyboard: !saving }">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form #batchFileDetailForm="ngForm"
+            
+            autocomplete="new-password">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span>{{
+                            'Chi tiết mẫu BF' |
+                            localize }}</span>
+
+                    </h4>
+                </div>
+                <div [class]="containerClass">
+                    <div class="card card-custom gutter-b">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                
+                                <div class="row mb-5 align-items-center">
+                                    <div class="col-md-3 col-sm-12 col-12">
+                                       <label class="form-label">{{ 'Tên nguồn dữ liệu'
+                                           |
+                                           localize }}</label>
+                                   </div>
+                                   <div class="col-md-9 col-sm-12 col-12">
+                                      {{batchFile.SourceDataName}}
+                                   </div>
+                               </div>
+                               <div class="row mb-5 align-items-center">
+                                   <div class="col-md-3 col-sm-12 col-12">
+                                       <label class="form-label">{{ 'Link' |
+                                           localize }}</label>
+                                   </div>
+                                   <div class="col-md-9 col-sm-12 col-12">
+                                     {{batchFile.SourceDataLink}}
+                                   </div>
+                               </div>
+                               <!-- <div class="row mb-5 align-items-center">
+                                   <div class="col-md-6 col-sm-12 col-12">
+                                       <label class="form-label">{{ 'Tài khoản' |
+                                           localize }}</label>
+                                      {{batchFile.SourceDataAccount}}
+                                   </div>
+                                   <div class="col-md-6 col-sm-12 col-12">
+                                       <label class="form-label">{{ 'Mật khẩu' |
+                                           localize }}</label>
+                                      {{batchFile.SourceDataPassword}}
+                                   </div>
+                               </div> -->
+                               <div class="row mb-5 align-items-center">
+                                   <div class="col-md-3 col-sm-12 col-12">
+                                       <label class="form-label">{{ 'Tên mẫu BF' |
+                                           localize }}</label>
+                                   </div>
+                                   <div class="col-md-9 col-sm-12 col-12">
+                                       {{batchFile.FileName}}
+                                   </div>
+                               </div>
+                               <div class="row mb-5 align-items-center">
+                                   <div class="col-md-3 col-sm-12 col-12">
+                                       <label class="form-label">{{ 'Mã mẫu BF' |
+                                           localize }}</label>
+                                   </div>
+                                   <div class="col-md-9 col-sm-12 col-12">
+                                       {{batchFile.FileCode}}
+                                   </div>
+                               </div>
+                               <div class="row mb-5 align-items-center">
+                                   <div class="col-md-3 col-sm-12 col-12">
+                                       <label class="form-label">{{ 'Mô tả' |
+                                           localize }} </label>
+                                   </div>
+                                   <div class="col-md-9 col-sm-12 col-12">
+                                       {{batchFile.Description}}
+                               </div>
+                               <div class="mt-5">
+                                   <table class="table table-bordered">
+                                       <thead>
+                                           <tr>
+                                               <th>STT</th>
+                                               <th>Tên trường dữ liệu</th>
+                                               <th>Định dạng dữ liệu</th>
+                                               <th>Key</th>
+                                           </tr>
+                                       </thead>
+                                       <tbody>
+                                           <tr
+                                               *ngFor="let item of batchFile.BatchFileFieldDataDtos; let i = index">
+                                               <td>{{i + 1}}</td>
+                                               <td>{{batchFile.BatchFileFieldDataDtos[i].FieldDataName}}</td>
+                                               <td><select class="form-control" disabled="true"
+                                                       name="DataType"
+                                                       [(ngModel)]="batchFile.BatchFileFieldDataDtos[i].DataType">
+                                                       <option
+                                                           *ngFor="let type of fieldDataType"
+                                                           [value]="type">{{
+                                                           BatchFileFieldDataTypeMapping[type]
+                                                           }}</option>
+                                                   </select>
+                                               </td>
+                                               <td>
+                                                   <label
+                                                       class="form-check form-check-custom form-check-solid py-1">
+                                                       <input disabled="true"
+                                                           id="EditRole_IsDefault"
+                                                           [ngModelOptions]="{standalone:true}"
+                                                           type="checkbox"
+                                                           name="IsKey"
+                                                           [(ngModel)]="batchFile.BatchFileFieldDataDtos[i].IsKey"
+                                                           class="form-check-input" />
+                                                   </label>
+                                               </td>
+                                           </tr>
+                                       </tbody>
+       
+                                   </table>
+                               </div>
+                               <div>
+                                   <button
+                                       *ngIf="'Pages.Administration.BatchFile.Edit' | permission"
+                                       type="submit"
+                                       class="btn btn-primary fw-bold"
+                                       (click)="navigateUpdate()"
+                                       >
+                                       <i class="fa fa-save"></i>
+                                       <span>{{ 'Cập nhật' | localize }}</span>
+                                   </button>
+       
+                                   <button
+                                   class="btn btn-secondary fw-bold"
+                                       [routerLink]="['/app/reconciliation/batch-file']"
+                                       (click)="cancel()">
+                                       <span class="d-none d-md-inline-block">
+
+                                           {{ 'Thoát' | localize }}
+                                       </span>
+                                   </button>
+                               </div>
+                               </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    
+</div>
+

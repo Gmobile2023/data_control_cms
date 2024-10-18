@@ -1,0 +1,202 @@
+<div appBsModal
+#createOrEditModal="bs-modal"
+class="modal fade centered-modal"
+tabindex="-1"
+role="dialog"
+aria-labelledby="createOrEditModal"
+aria-hidden="true"
+[config]="{ backdrop: 'static', keyboard: !saving }">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <form *ngIf="active" #manageEmailUpdateForm="ngForm"
+         autocomplete="new-password">
+          <div class="modal-header">
+            <h5 class="modal-title">Chỉnh sửa</h5>
+            <button type="button" class="btn-close" (click)="close()"></button>
+          </div>
+          <div class="modal-body">
+              <div class="row mb-5 align-items-center">
+                  <div class="col-md-3 col-sm-12 col-12">
+                      <label class="form-label">{{
+                          'Têm mẫu Email:'
+                          |
+                          localize }} <span style="color: red;">*</span></label>
+                  </div>
+                  <div class="col-md-9 col-sm-12 col-12">
+                      <input 
+                        type="text" 
+                        class="form-control form-control-lg"
+                        id="emailTemplateName"
+                        #TypeEmailNameInput="ngModel"
+                        name="emailTemplateName"
+                        [(ngModel)]="manageEmail.emailTemplateName"
+                        required
+                        maxlength="100"
+                        pattern="^(?!\s*$).+"
+                        readonly>
+                        <div
+                            *ngIf="TypeEmailNameInput.hasError('pattern') && !TypeEmailNameInput.pristine">
+                            <span
+                                class="form-text text-danger text-left">{{
+                                'Giá trị nhập vào không hợp lệ' |
+                                localize }}</span>
+                        </div>
+                        <div
+                            *ngIf="!TypeEmailNameInput.valid && TypeEmailNameInput.hasError('required') && !TypeEmailNameInput.pristine">
+                            <span
+                                class="form-text text-danger text-left">{{
+                                'Không được để trống' | localize }}</span>
+                        </div>
+                  </div>
+                  
+              </div>
+              <div class="row mb-5 align-items-center">
+                <div class="col-md-3 col-sm-12 col-12">
+                    <label class="form-label">{{
+                        'Mã mẫu Email:'
+                        |
+                        localize }} <span style="color: red;">*</span></label>
+                </div>
+                <div class="col-md-9 col-sm-12 col-12">
+                    <input 
+                      type="text" 
+                      class="form-control form-control-lg"
+                      id="emailTemplateCode"
+                      #TypeEmailCodeInput="ngModel"
+                      name="emailTemplateCode"
+                      [(ngModel)]="manageEmail.emailTemplateCode"
+                      required
+                      maxlength="100"
+                      pattern="^(?!\s*$).+"
+                      readonly
+                      >
+                      <div
+                      *ngIf="TypeEmailCodeInput.hasError('pattern') && !TypeEmailCodeInput.pristine">
+                      <span
+                          class="form-text text-danger text-left">{{
+                          'Giá trị nhập vào không hợp lệ' |
+                          localize }}</span>
+                  </div>
+                  <div
+                      *ngIf="!TypeEmailCodeInput.valid && TypeEmailCodeInput.hasError('required') && !TypeEmailCodeInput.pristine">
+                      <span
+                          class="form-text text-danger text-left">{{
+                          'Không được để trống' | localize }}</span>
+                  </div>
+                </div>
+
+            </div>
+            <div class="row mb-5 align-items-center">
+
+                <div class="col-md-3 col-sm-12 col-12">
+                    <label class="form-label">{{ 'Loại mẫu email' |
+                        localize }}</label>
+                    <span style="color: red;"> *</span>
+                </div>
+                <div class="col-md-9 col-sm-12 col-12">
+                    <select
+                        [(ngModel)]="manageEmail.emailTemplateTypeId"
+                        id="emailTemplateTypeId"
+                        class="form-control"
+                        type="text"
+                        #serviceType="ngModel"
+                        name="emailTemplateTypeId"
+                        required
+                        maxlength="64"
+                        readonly>
+                        <option *ngFor="let result of listItems" [value]="result.id"
+                            >
+                            {{ result.emailTemplateTypeName }}
+                        </option>
+                    </select>
+                    
+                </div>
+            </div>
+            <div class="row mb-5 align-items-center">
+                <div class="col-md-3 col-sm-12 col-12">
+                    <label class="form-label">{{
+                        'Tiêu đề:'
+                        |
+                        localize }} <span style="color: red;">*</span></label>
+                </div>
+                <div class="col-md-3 col-sm-12 col-12" style="display: flex; align-items: center;">
+                    <div class="input-group" style="position: relative;">
+                        <input 
+                            type="text" 
+                            class="form-control form-control-lg"
+                            id="titleEmail"
+                            #TitleEmailInput="ngModel"
+                            name="titleEmail"
+                            [(ngModel)]="manageEmail.titleEmail"
+                            required
+                            maxlength="100"
+                            pattern="^(?!\s*$).+"
+                            readonly
+                            
+                        >
+                        <div
+                        *ngIf="TitleEmailInput.hasError('pattern') && !TitleEmailInput.pristine">
+                        <span
+                            class="form-text text-danger text-left">{{
+                            'Giá trị nhập vào không hợp lệ' |
+                            localize }}</span>
+                    </div>
+                    <div
+                        *ngIf="!TitleEmailInput.valid && TitleEmailInput.hasError('required') && !TitleEmailInput.pristine">
+                        <span
+                            class="form-text text-danger text-left">{{
+                            'Không được để trống' | localize }}</span>
+                    </div>
+                    </div>
+                        
+                        
+                </div>
+                <div class="col-md-3 col-sm-12 col-12" style="margin-left: 10px;">
+                    <button 
+                    type="button"
+                    (click)="showDialog()" 
+                    class="round-button"><i class="bi bi-info-lg" style="font-size: 2em; display: block; margin: 0 auto;"></i></button>
+                    <p-dialog [(visible)]="visible" [style]="{width: '20vw'}">
+                        <p [innerHTML]="getPopoverContentAsHtml()"></p>
+                    </p-dialog>
+                </div>
+            </div>
+            <div class="row mb-5 align-items-center">
+                <div class="col-md-3 col-sm-12 col-12">
+                    <label class="form-label" >{{ 'Mô tả' |
+                        localize }} 
+                    </label>
+                </div>
+                <p-editor 
+                  class="form-control form-control-lg" 
+                  placeholder="Nhập nội dung  mẫu Email"
+                  name="description"
+                  class="description"
+                  [style]="{ height: '320px' }"
+                  [(ngModel)]="manageEmail.description"
+                  readonly>
+              </p-editor>
+
+
+            </div>
+          </div>
+              <div class="d-flex justify-content-end">
+
+                <button
+                    type="button"
+                    class="btn btn-light-primary fw-bold"
+                    [routerLink]="['/app/reconciliation/manageEmail']"
+                    (click)="close()">
+
+                    <span class="d-none d-md-inline-block">
+                        {{ 'Thoát' | localize }}
+                    </span>
+                </button>
+                
+
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+

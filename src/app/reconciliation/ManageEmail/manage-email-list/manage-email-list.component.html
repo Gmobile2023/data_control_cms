@@ -1,0 +1,179 @@
+<div [@routerTransition]>
+    <sub-header [title]="'Quản lý mẫu email' | localize">
+
+        <div role="actions">
+            <button
+                class="btn btn-primary float-end"
+                (click)="openCreateModal()">
+                <i class="fa fa-plus btn-md-icon"></i>
+                <span class="d-none d-md-inline-block">
+                    {{ 'Tạo mới' | localize }}
+                </span>
+            </button>
+        </div>
+
+    </sub-header>
+
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <form class="form" autocomplete="new-password">
+                    <div class="row align-items-center mb-5">
+                        <div class="col-md-9 col-xl-9 col-sm-12">
+                            <div class="m-form__group align-items-center">
+                                <div class="input-group">
+                                    <input
+                                        [(ngModel)]="filterText"
+                                        name="filterText"
+                                        autoFocus
+                                        class="form-control m-input"
+                                        placeholder="Tên mẫu email"
+                                        type="text" />
+                                    <button (click)="getManageEmail()"
+                                        class="btn btn-primary"
+                                        type="submit">
+                                        <i class="flaticon-search-1"
+                                            [attr.aria-label]="l('Search')"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+                <div class="row align-items-center">
+                    <div class="primeng-datatable-container">
+
+                        <div class="primeng-datatable-container">
+                            <p-table [value]="products"
+                                [tableStyle]="{ 'min-width': '50rem' }">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th>STT</th>
+                                        <th style="min-width: 130px"
+                                            [hidden]="
+                                    !(
+                                        [
+                                            'Pages.Administration.EmailTemplate.Edit',
+                                            'Pages.Administration.EmailTemplate'
+                                        ] | permissionAny
+                                    )
+                                    ">
+                                            {{ 'Actions' | localize }}
+                                        </th>
+                                        <th style="min-width: 130px">Tên mẫu
+                                            email</th>
+                                        <th style="min-width: 130px">Mã mẫu
+                                            email</th>
+                                        <th style="min-width: 130px">Loại mẫu
+                                            email</th>
+                                        <th style="min-width: 130px">
+                                            Kích hoạt/Bỏ kích hoạt
+                                        </th>
+
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-product
+                                    let-rowIndex="rowIndex">
+                                    <tr>
+                                        <td>{{ rowIndex +1 }}</td>
+                                        <td style="min-width: 130px"
+                                            [hidden]="
+                                        !(
+                                            [
+                                            'Pages.Administration.EmailTemplate.Edit',
+                                            'Pages.Administration.EmailTemplate.Delete'
+                                            ] | permissionAny
+                                        )
+                                    ">
+                                            <div class="btn-group" dropdown
+                                                placement="bottom left"
+                                                container="body">
+                                                <button id="dropdownButton"
+                                                    type="button"
+                                                    class="btn btn-primary btn-sm dropdown-toggle"
+                                                    dropdownToggle
+                                                    aria-controls="dropdownMenu">
+                                                    <i class="fa fa-cog"></i>
+                                                    <span class="caret"></span>
+                                                    {{ 'Action' | localize }}
+                                                </button>
+                                                <ul id="dropdownMenu"
+                                                    class="dropdown-menu"
+                                                    role="menu" *dropdownMenu
+                                                    aria-labelledby="dropdownButton">
+                                                    <li role="menuitem"
+                                                        *ngIf="'Pages.Administration.EmailTemplate.Edit' | permission">
+                                                        <a href="javascript:;"
+                                                            class="dropdown-item"
+                                                            (click)="navigateUpdate(product.id)">
+                                                            {{ 'Chỉnh sửa' |
+                                                            localize }}
+                                                        </a>
+                                                    </li>
+                                                    <!-- <li role="menuitem"
+                                                        *ngIf="'Pages.Administration.EmailTemplate.Edit' | permission">
+                                                        <a href="javascript:;"
+                                                            class="dropdown-item"
+                                                            (click)="navigateDetail(product.id)">
+                                                            {{ 'Chi tiết' |
+                                                            localize }}
+                                                        </a>
+                                                    </li> -->
+                                                    <li role="menuitem"
+                                                        *ngIf="'Pages.Administration.EmailTemplate.Delete' | permission">
+                                                        <a href="javascript:;"
+                                                            class="dropdown-item"
+                                                            (click)="deleteManageEmail(product)">
+                                                            {{ 'Xóa' | localize
+                                                            }}
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+
+                                        <td>{{ product.emailTemplateName }}</td>
+                                        <td>{{ product.emailTemplateCode }}</td>
+                                        <td>{{ product.emailTemplateTypeName}}</td>
+
+                                        <td style="min-width: 130px">
+                                            <label class="switch">
+                                                <input
+                                                    [(ngModel)]="product.active"
+                                                    type="checkbox"
+                                                    (change)="updateStatus(product.id, product.active)">
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </td>
+
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+
+                        <div class="primeng-no-data text-center mt-2"
+                            *ngIf="paginator.total == 0">
+                            {{ 'NoData' | localize }}
+                        </div>
+                        <div class="mt-3" *ngIf="paginator.total > 0">
+                            <p-paginator (onPageChange)="onPageChange($event)"
+                                [rows]="paginator.pageSize"
+                                [totalRecords]="paginator.total"
+                                [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <manage-email-create #createManageEmailModal
+            (getManageEmail)="getManageEmail()"></manage-email-create>
+
+        <manage-email-update #updateManageEmailModal
+            (getManageEmail)="getManageEmail()"></manage-email-update>
+
+        <!-- <manage-email-detail #detailManageEmailModal
+            (getManageEmail)="getManageEmail()"></manage-email-detail> -->
+    </div>
+</div>

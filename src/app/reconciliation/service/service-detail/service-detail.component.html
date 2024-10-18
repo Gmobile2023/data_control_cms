@@ -1,0 +1,212 @@
+<div [@routerTransition]>
+    <sub-header [title]="'Chi tiết dịch vụ đối soát' | localize">
+    </sub-header>
+
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div style="pointer-events: none;">
+                        <div class="row mb-5 align-items-center">
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <label class="form-label">{{ 'Tên dịch vụ'
+                                    |
+                                    localize }} <span style="color: red;">*</span></label>
+                            </div>
+                            <div class="col-md-6 col-sm-12 col-12">
+                                <input id="serviceName" class="form-control" type="text" name="serviceName" required
+                                    maxlength="64" [value]="serviceService.serviceDetail.serviceName" />
+                            </div>
+                        </div>
+                        <div class="row mb-5 align-items-center">
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <label class="form-label">{{ 'Mã dịch vụ' |
+                                    localize }}</label>
+                                <span style="color: red;"> *</span>
+                            </div>
+                            <div class="col-md-3 col-sm-12 col-12">
+                                <input id="serviceCode" class="form-control" type="text" name="serviceCode" required
+                                    maxlength="64" [value]="serviceService.serviceDetail.serviceCode" />
+                            </div>
+                            <div class="col-md-3 col-sm-12 col-12">
+                                <label class="form-label">{{
+                                    'Mẫu BF & Nguồn dữ liệu' |
+                                    localize }}</label>
+                                <span style="color: red;"> *</span>
+                            </div>
+                            <div class="col-md-3 col-sm-12 col-12">
+                                <input id="serviceCode" class="form-control" type="text" name="serviceCode" required
+                                    maxlength="64" [value]="serviceService.serviceDetail.bfSourceName" />
+                            </div>
+                        </div>
+                        <div class="row mb-5 align-items-center">
+
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <label class="form-label">{{ 'Loại dịch vụ' |
+                                    localize }}</label>
+                                <span style="color: red;"> *</span>
+                            </div>
+                            <div class="col-md-6 col-sm-12 col-12">
+                                <input id="serviceCode" class="form-control" type="text" name="serviceCode" required
+                                    maxlength="64" [value]="serviceService.serviceDetail.serviceTypeName" />
+                            </div>
+                        </div>
+                        <div class="row mb-5 align-items-center">
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <label class="form-label">{{ 'Mô tả' |
+                                    localize }}</label>
+                            </div>
+                            <div class="col-md-4 col-sm-12 col-12">
+                                <textarea id="description" class="form-control" type="text" name="description"
+                                    [value]="serviceService.serviceDetail.description" maxlength="64">
+                                </textarea>
+                            </div>
+                        </div>
+                        <div class="row mb-5 align-items-center">
+                            <label class="form-label" style="font-weight: bold;">{{
+                                'Chu kỳ đối soát' |
+                                localize }}</label>
+
+                        </div>
+                        <div class="row mb-5 align-items-center">
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <label class="form-label">{{ 'Chu kỳ đối soát' |
+                                    localize }}</label>
+                                <span style="color: red;"> *</span>
+                            </div>
+                            <div class="col-md-3 col-sm-12 col-12">
+                                <select [(ngModel)]="serviceService.serviceDetail.cycle"
+                                    [ngModelOptions]="{standalone: true}" id="cycle" #cycle="ngModel"
+                                    class="form-control" type="text" name="cycle" required maxlength="64">
+                                    <option value="1">Daily</option>
+                                    <option value="2">Weekly</option>
+                                    <option value="3">Monthly</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-5 align-items-center">
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <label class="form-label">{{ 'Thời gian xuất' |
+                                    localize }} </label>
+                                <span style="color: red;"> *</span>
+                            </div>
+                            <div class="col-md-3 col-sm-12 col-12">
+                                <input id="timeValue" class="form-control" type="text" required name="timeValue"
+                                    [value]="serviceService.serviceDetail.timeValue" maxlength="64" />
+                            </div>
+                        </div>
+                        <div class="row mb-5 align-items-center">
+                            <label class="form-label" style="font-weight: bold;">{{
+                                'Gửi báo cáo sau đối soát' |
+                                localize }}</label>
+                        </div>
+                        <div class="row mb-5 align-items-center">
+
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <label class="form-label">{{ 'Email' |
+                                    localize }}</label>
+                                <span style="color: red;"> *</span>
+                            </div>
+                            <div class="col-md-4 col-sm-12 col-12">
+                                <input id="receiverMail" class="form-control" type="text" name="receiverMail" required
+                                    [value]="serviceService.serviceDetail.receiverMail" maxlength="64" />
+                            </div>
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <label class="form-label">{{
+                                    'Gửi email khi khớp' |
+                                    localize }}</label>
+                            </div>
+                            <div class="col-md-1 col-sm-12 col-12">
+                                <input class="form-check-input" type="checkbox"
+                                    [(ngModel)]="serviceService.serviceDetail.isSendSuccessMail" id="isSendSuccessMail">
+                            </div>
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <label class="form-label">{{
+                                    'Gửi email khi lệch' |
+                                    localize }}</label>
+                            </div>
+                            <div class="col-md-1 col-sm-12 col-12">
+                                <input class="form-check-input" type="checkbox"
+                                    [(ngModel)]="serviceService.serviceDetail.isSendFailMail" id="isSendFailMail">
+                            </div>
+                            <div class="col-md-3 col-sm-12 col-12">
+
+                            </div>
+                        </div>
+                        <div class="row mb-5 align-items-center">
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <label class="form-label">{{
+                                    'Upload file báo cáo' |
+                                    localize }}</label>
+                                <span style="color: red;"> *</span>
+                            </div>
+                            <div class="col-md-4 col-sm-12 col-12">
+                                <input id="uploadUrl" required class="form-control" type="text" name="uploadUrl"
+                                    [value]="serviceService.serviceDetail.uploadUrl" maxlength="64" />
+                            </div>
+                        </div>
+                        <div class="row mb-5 align-items-center">
+                            <h4>Danh sách nhà cung cấp</h4>
+                        </div>
+                        <div class="primeng-datatable-container">
+                            <p-table [value]="serviceService.suppliersForDetail" [tableStyle]="{ 'min-width': '50rem' }">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Tên nhà cung cấp</th>
+                                        <th>Trạng thái</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-product let-rowIndex="rowIndex">
+                                    <tr>
+                                        <td>{{rowIndex+1}}</td>
+                                        <td>{{product.supplierName}}</td>
+                                        <td>{{product.status}}</td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                        <div class="row mt-5 mb-5 align-items-center">
+                            <h4>Danh sách đại lý</h4>
+                        </div>
+                        <div class="primeng-datatable-container">
+                            <p-table [value]="serviceService.agenciesForDetail" [tableStyle]="{ 'min-width': '50rem' }">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Tên đại lý</th>
+                                        <th>Hành động sau đối soát</th>
+                                        <th>Trạng thái</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-product let-rowIndex="rowIndex">
+                                    <tr>
+                                        <td>{{rowIndex+1}}</td>
+                                        <td>{{product.agencyName}}</td>
+                                        <td>{{product.actionList}}</td>
+                                        <td>{{product.status}}</td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                        <div class="mt-5">
+                        </div>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-light-primary fw-bold"
+                        [routerLink]="['/app/reconciliation/service']"
+                        >
+                            
+                            <span>{{ 'Thoát' | localize }}</span>
+                        </button>
+                        <button
+                            (click)="navigateDetail(serviceService.serviceDetail.id)"
+                            type="button" class="btn btn-primary fw-bold">
+                            <span>{{ 'Cập nhật' | localize }}</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

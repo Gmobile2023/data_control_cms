@@ -1,0 +1,515 @@
+<div appBsModal
+    #createOrEditModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="createOrEditModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static', keyboard: !saving }">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <form #serviceagencyCreateForm="ngForm"
+                (ngSubmit)="save()" autocomplete="new-password">
+                <div class="modal-header">
+                    <span *ngIf="agencyDto.id">{{
+                        'Chỉnh sửa đại lý' |
+                        localize }}</span>
+                    <span *ngIf="!agencyDto.id">{{
+                        'Thêm mới đại lý' |
+                        localize }}</span>
+                    <button type="button" class="btn-close"
+                        (click)="close()" [disabled]="saving">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- <div class="mb-5">
+                        <div class="col-md-2 col-sm-12 col-12">
+                            <label class="form-label">{{ 'Mã đại lý' | localize }} <span style="color: red;">*</span></label>
+                        <input
+                            id="agencyCode" 
+                            #agencyCodeInput="ngModel" 
+                            class="form-control"
+                            type="text" 
+                            name="agencyCode" 
+                            [(ngModel)]="agencyDto.agencyCode" 
+                            required
+                            maxlength="64" />
+                        <validation-messages [formCtrl]="agencyCodeInput"></validation-messages>
+                        </div>
+                        
+                    </div> -->
+                    <div class="row mb-5 mt-5 align-items-center">
+                        <div class="col-md-2 col-sm-12 col-12">
+                            <label class="form-label">{{
+                                'Tên đại lý'
+                                |
+                                localize }} <span
+                                    style="color: red;">*</span></label>
+                        </div>
+                        <div class="col-md-4 col-sm-12 col-12">
+                            <!-- <select
+                                (change)="changeInputChooseAgency()"
+                                [(ngModel)]="agencyDto.agencyId"
+                                id="agencyId"
+                                #nameTb="ngModel"
+                                class="form-control"
+                                type="text" name="agencyId"
+                                required
+                                maxlength="64">
+                                <option
+                                    *ngFor="let item of agencyDropList"
+                                    [value]="item.agencyId">{{
+                                    item.agencyName }}</option>
+                            </select> -->
+
+                            <p-dropdown
+                                [options]="agencyDropList"
+                                (change)="changeInputChooseAgency()"
+                                [(ngModel)]="agencyDto.agencyId"
+                                [filter]="true"
+                                optionLabel="agencyName"
+                                optionValue="agencyId"
+                                placeholder="Chọn đại lý"
+                                name="agencyId"
+                                required
+                                #nameTb="ngModel">
+                            </p-dropdown>
+                            <validation-messages
+                                [formCtrl]="nameTb"></validation-messages>
+                        </div>
+                        <div class="col-md-1">
+                            <input
+                                [value]="1"
+                                id="isUseSupplierName"
+                                [checked]="agencyDto.isUseAgencyName == true"
+                                type="radio"
+                                name="isUseNameOrCode"
+                                (change)="onchangeRadioCodeOrName(1)"
+                                class="form-check-input" />
+                        </div>
+                        <div class="col-md-2">
+                            Đối soát theo tên
+                        </div>
+                        <div class="col-md-1">
+                            <input
+                                [value]="2"
+                                id="isUseSupplierCode"
+                                [checked]="agencyDto.isUseAgencyCode == true"
+                                type="radio"
+                                name="isUseNameOrCode"
+                                (change)="onchangeRadioCodeOrName(2)"
+                                class="form-check-input" />
+                        </div>
+                        <div class="col-md-2">
+                            Đối soát theo mã
+                        </div>
+                    </div>
+
+                    <div class="row mb-5 align-items-center">
+                        <label class="form-label"
+                            style="font-weight: bold;">{{
+                            'Gửi báo cáo sau đối soát' |
+                            localize }}</label>
+                    </div>
+                    <div class="row mb-5 align-items-center">
+
+                        <div class="col-md-2 col-sm-12 col-12">
+                            <label class="form-label">{{ 'Email' |
+                                localize }}</label>
+                            <span style="color: red;"> *</span>
+                        </div>
+                        <div class="col-md-4 col-sm-12 col-12">
+                            <input
+                                [disabled]="agencyDto.isUseAgencyEmail"
+                                required
+                                [(ngModel)]="agencyDto.email"
+                                id="email"
+                                #emailTb="ngModel"
+                                class="form-control" type="email"
+                                name="email" maxlength="64" />
+                            <validation-messages
+                                [formCtrl]="emailTb"></validation-messages>
+                        </div>
+                        <div class="col-md-3 col-sm-12 col-12">
+                            <label class="form-label">{{
+                                'Sử dụng email đại lý' |
+                                localize }}</label>
+                        </div>
+                        <div class="col-md-1 col-sm-12 col-12">
+                            <input
+                                (change)="changeInputIsEmailFromAgency()"
+                                name="isUseAgencyEmail"
+                                [(ngModel)]="agencyDto.isUseAgencyEmail"
+                                class="form-check-input"
+                                type="checkbox"
+                                id="isUseAgencyEmail">
+
+                        </div>
+                        <div class="col-md-4 col-sm-12 col-12">
+
+                        </div>
+                    </div>
+                    <div class="row mb-5 align-items-center">
+                        <div class="col-md-3 col-sm-12 col-12">
+                            <label class="form-label">{{
+                                'Gửi email khi khớp' |
+                                localize }}</label>
+                        </div>
+                        <div class="col-md-1 col-sm-12 col-12">
+                            <input
+                                [(ngModel)]="agencyDto.isSendSuccessMail"
+                                class="form-check-input"
+                                type="checkbox"
+                                id="isSendSuccessMail"
+                                name="isSendSuccessMail">
+                        </div>
+                        <div class="col-md-3 col-sm-12 col-12">
+                            <label class="form-label">{{
+                                'Gửi email khi lệch' |
+                                localize }}</label>
+                        </div>
+                        <div class="col-md-1 col-sm-12 col-12">
+                            <input class="form-check-input"
+                                type="checkbox"
+                                [(ngModel)]="agencyDto.isSendFailMail"
+                                name="isSendFailMail"
+                                id="isSendFailMail">
+                        </div>
+                    </div>
+                    <div class="row mb-5 align-items-center">
+                        <div class="col-md-2 col-sm-12 col-12">
+                            <label class="form-label">{{
+                                'Upload file báo cáo' |
+                                localize }}</label>
+                            <span style="color: red;"> *</span>
+                        </div>
+                        <div class="col-md-4 col-sm-12 col-12">
+                            <input
+                                [disabled]="agencyDto.isUseUploadReportFileLink"
+                                #uploadTb="ngModel"
+                                required
+                                [(ngModel)]="agencyDto.uploadReportFileLink"
+                                id="uploadReportFileLink"
+                                class="form-control" type="url"
+                                name="uploadReportFileLink"
+                                />
+                            <div
+                                *ngIf="serviceagencyCreateForm?.controls?.uploadReportFileLink?.errors?.required && !uploadTb.pristine">
+                                <span
+                                    class="form-text text-danger text-left">{{
+                                    'Trường này là bắt buộc' |
+                                    localize }}</span>
+                            </div>
+                            <!-- <div
+                                *ngIf="serviceagencyCreateForm?.controls?.uploadReportFileLink?.errors?.pattern && !uploadTb.pristine">
+                                <span
+                                    class="form-text text-danger text-left">{{
+                                    'Link không đúng định dạng' |
+                                    localize
+                                    }}</span>
+                            </div> -->
+                        </div>
+                        <div class="col-md-4 col-sm-12 col-12">
+                            <label class="form-label">{{
+                                'Sử dụng link tải file gửi đại lý' |
+                                localize }}</label>
+                        </div>
+                        <div class="col-md-1 col-sm-12 col-12">
+                            <input
+                                (change)="changeInputIsDataSourceFromAgency()"
+                                name="isUseUploadReportFileLink"
+                                [(ngModel)]="agencyDto.isUseUploadReportFileLink"
+                                class="form-check-input"
+                                type="checkbox"
+                                id="isUseUploadReportFileLink">
+                        </div>
+                    </div>
+                    <div class="row mb-5 align-items-center">
+                        <div class="col-md-2 col-sm-12 col-12">
+                            <label class="form-label">{{
+                                'Tài khoản' |
+                                localize }}</label>
+                        </div>
+                        <div class="col-md-4 col-sm-12 col-12">
+                            <input
+                                [disabled]="agencyDto.isUseUploadReportFileLink"
+                                #accountTb="ngModel"
+                                [(ngModel)]="agencyDto.account"
+                                id="account" class="form-control"
+                                type="text" name="account"
+                                maxlength="64" />
+                            <validation-messages
+                                [formCtrl]="accountTb"></validation-messages>
+                        </div>
+                        <div class="col-md-2 col-sm-12 col-12">
+                            <label class="form-label">{{
+                                'Mật khẩu' |
+                                localize }}</label>
+                        </div>
+                        <div class="col-md-4 col-sm-12 col-12">
+                            <input
+                                [disabled]="agencyDto.isUseUploadReportFileLink"
+                                #passTb="ngModel"
+                                [(ngModel)]="agencyDto.password"
+                                id="password" class="form-control"
+                                type="text" name="password"
+                                maxlength="64" />
+                            <validation-messages
+                                [formCtrl]="passTb"></validation-messages>
+                        </div>
+                    </div>
+                    <div class="row mb-5 align-items-center">
+                        <div class="col-md-2 col-sm-12 col-12">
+                            <label class="form-label">{{ 'Email template ' |
+                                localize }}</label>
+                            <span style="color: red;"> *</span>
+                        </div>
+                        <div class="col-md-4 col-sm-12 col-12">
+                            <!-- <select
+                                [(ngModel)]="agencyDto.emailSendTemplateId"
+                                class="form-control"
+                                name="emailSendTemplateId">
+                                <option
+                                    *ngFor="let item of serviceService.emailTemplates"
+                                    [ngValue]="item.id">{{item.emailTemplateName}}</option>
+                            </select> -->
+
+                            <p-dropdown
+                                [options]="serviceService.emailTemplates"
+                                [(ngModel)]="agencyDto.emailSendTemplateId"
+                                [filter]="true"
+                                optionLabel="emailTemplateName"
+                                optionValue="id"
+                                placeholder="Chọn mẫu email"
+                                name="emailSendTemplateId"
+                                required
+                                #nameTb="ngModel">
+                            </p-dropdown>
+                            <validation-messages
+                                [formCtrl]="nameTb"></validation-messages>
+                        </div>
+                    </div>
+                    <div class="row mb-5 align-items-center">
+
+                        <div class="col-md-2 col-sm-12 col-12">
+                            <label class="form-label">{{
+                                'Định dạng tên file báo cáo đối soát gửi Đại lý'
+                                |
+                                localize }}</label>
+                            <!-- <span style="color: red;"> *</span> -->
+                        </div>
+                        <div class="col-md-4 col-sm-12 col-12">
+                            <input
+                                [(ngModel)]="agencyDto.fileNameFormatSend"
+                                id="fileNameFormatSend"
+                                #fileNameFormatSend="ngModel"
+                                class="form-control" type="text"
+                                name="fileNameFormatSend" maxlength="64" />
+                            <!-- <validation-messages
+                                [formCtrl]="emailTb"></validation-messages> -->
+                        </div>
+                        <div class="col-md-3 col-sm-12 col-12"
+                            style="margin-left: 10px;">
+                            <button
+                                type="button"
+                                (click)="showDialog()"
+                                class="round-button"><i class="bi bi-info-lg"
+                                    style="font-size: 2em; display: block; margin: 0 auto;"></i></button>
+                            <p-dialog [(visible)]="visible"
+                                [style]="{width: '20vw'}">
+                                <p>
+                                    {{popoverContent}}
+                                </p>
+                            </p-dialog>
+                        </div>
+                    </div>
+                    <div class="row mb-5 align-items-center">
+                        <div class="col-md-3 col-sm-12 col-12">
+                            <label class="form-label">{{
+                                'Tải lên khi khớp' |
+                                localize }}</label>
+                        </div>
+                        <div class="col-md-1 col-sm-12 col-12">
+                            <input
+                                name="isUploadSuccessFile"
+                                [(ngModel)]="agencyDto.isUploadSuccessFile"
+                                class="form-check-input"
+                                type="checkbox"
+                                id="isUploadSuccessFile">
+                        </div>
+                        <div class="col-md-3 col-sm-12 col-12">
+                            <label class="form-label">{{
+                                'Tải lên khi lệch' |
+                                localize }}</label>
+                        </div>
+                        <div class="col-md-1 col-sm-12 col-12">
+                            <input class="form-check-input"
+                                type="checkbox"
+                                name="isUploadFailFile"
+                                [(ngModel)]="agencyDto.isUploadFailFile"
+                                id="isUploadFailFile">
+                        </div>
+                    </div>
+                    <h5>Dữ liệu báo cáo đối soát</h5>
+                    <div>Chọn các trường dữ liệu xuất báo cáo đại lý</div>
+                    <div class="row mb-5 align-items-center">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Tên trường dữ liệu</th>
+                                    <th>Trường đối soát</th>
+                                    <th>Yêu cầu</th>
+                                    <th>Xuất báo cáo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <input class="form-check-input"
+                                            [(ngModel)]="checkAll"
+                                            name="checkAll" type="checkbox"
+                                            (change)="checkAllFunc()" />
+                                    </td>
+                                </tr>
+                                <tr class="tr-hover"
+                                    *ngFor="let item of serviceService.templateBatchFile; index as i">
+                                    <td>{{i + 1}}</td>
+                                    <td>{{item.FieldDataName}}</td>
+                                    <td>
+                                        <input disabled class="form-check-input"
+                                            [name]="'reconcile' + i"
+                                            type="checkbox"
+                                            [(ngModel)]="item.IsReconcile" />
+                                    </td>
+                                    <td>
+                                        <input disabled class="form-check-input"
+                                            [name]="'require' + i"
+                                            type="checkbox"
+                                            [(ngModel)]="item.IsRequired" />
+                                    </td>
+                                    <td>
+                                        <input class="form-check-input"
+                                            [checked]="isChecked(item.Id)"
+                                            [name]="'check' + i" type="checkbox"
+                                            (click)="toggleTemplateExport(item.Id)" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row mb-5 align-items-center">
+                        <label class="form-label"
+                            style="font-weight: bold;">{{
+                            'Chu kỳ gửi dữ liệu' |
+                            localize }}</label>
+                    </div>
+                    <div class="row mb-5 align-items-center">
+
+                        <div class="col-md-1 col-sm-12 col-12">
+                            <input
+                                name="sendWhenSuccess"
+                                class="form-check-input"
+                                type="checkbox"
+                                id="sendWhenSuccess"
+                                [(ngModel)]="agencyDto.isSendMailAfterReconcile">
+                        </div>
+                        <div class="col-md-3 col-sm-12 col-12">
+                            <label class="form-label">{{
+                                'Gửi ngay sau hoàn thành đối soát' |
+                                localize }}</label>
+                        </div>
+
+                    </div>
+                    <div class="row mb-5 align-items-center">
+                        <div class="col-md-2 col-sm-12 col-12">
+                            <label class="form-label">{{
+                                'Chu kỳ gửi' |
+                                localize }}</label>
+                            <span style="color: red;"> *</span>
+                        </div>
+                        <div class="col-md-3 col-sm-12 col-12">
+                            <select [(ngModel)]="agencyDto.cycle"
+                                id="cycle" class="form-control"
+                                type="text" name="cycle" required
+                                [disabled]="agencyDto.isSendMailAfterReconcile"
+                                #cycleTb="ngModel"
+                                maxlength="64">
+                                <option value="1">Daily</option>
+                                <option value="2">Weekly</option>
+                                <option value="3">Monthly</option>
+                            </select>
+                            <validation-messages
+                                [formCtrl]="cycleTb"></validation-messages>
+                        </div>
+                    </div>
+                    <div class="row mb-5 align-items-center">
+                        <div class="col-md-2 col-sm-12 col-12">
+                            <label class="form-label">{{
+                                'Thời gian gửi' |
+                                localize }} </label>
+                            <span style="color: red;"> *</span>
+                        </div>
+                        <div class="col-md-3 col-sm-12 col-12 my-custom">
+                            <p-calendar
+                                [(ngModel)]="agencyDto.date"
+                                [showTime]="true"
+                                [timeOnly]="true"
+                                #timeValue="ngModel"
+                                name="date"
+                                required
+                                [disabled]="agencyDto.isSendMailAfterReconcile">
+                            </p-calendar>
+                        </div>
+                        <div class="col-md-3 col-sm-12 col-12">
+                            <select
+                                [(ngModel)]="agencyDto.day"
+                                name="weekday"
+                                id="weekday"
+                                class="form-control"
+                                *ngIf="agencyDto.cycle == 2"
+                                [disabled]="agencyDto.isSendMailAfterReconcile">
+                                <option
+                                    *ngFor="let item of serviceService.lstWeekDays"
+                                    [ngValue]="item.value">{{item.text}}</option>
+                            </select>
+
+                            <select
+                                [(ngModel)]="agencyDto.day"
+                                name="monthDay"
+                                class="form-control"
+                                *ngIf="agencyDto.cycle == 3"
+                                [disabled]="agencyDto.isSendMailAfterReconcile">
+                                <option
+                                    *ngFor="let item of serviceService.lstMonthDays"
+                                    [ngValue]="item.value">{{item.text}}</option>
+                            </select>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button"
+                        class="btn btn-light-primary fw-bold"
+                        (click)="close()">
+                        {{ 'Cancel' | localize }}
+                    </button>
+                    <button type="submit"
+                        [disabled]="!serviceagencyCreateForm.form.valid"
+                        class="btn btn-primary fw-bold"
+                        [buttonBusy]="saving">
+                        <i class="fa fa-save"></i>
+                        <span>{{ 'Save' | localize }}</span>
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

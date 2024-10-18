@@ -1,0 +1,251 @@
+<div
+    appBsModal
+    #createOrEditModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="createOrEditModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static', keyboard: !saving }">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #supplierForm="ngForm"
+                (ngSubmit)="save()" autocomplete="new-password">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="supplier.supplierId">{{
+                            'Chỉnh sửa nhà cung cấp' |
+                            localize }}: {{ supplier.supplierName }}</span>
+                        <span *ngIf="!supplier.supplierId">{{
+                            'Thêm mới nhà cung cấp' |
+                            localize }}</span>
+                    </h4>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        (click)="close()"
+                        [disabled]="saving">
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="mb-5">
+                        <label class="form-label">{{ 'Mã nhà cung cấp' | localize }} <span style="color: red;">*</span></label>
+                        <input
+                            id="supplierCode" 
+                            #supplierCodeInput="ngModel" 
+                            class="form-control"
+                            type="text" 
+                            name="supplierCode" 
+                            [(ngModel)]="supplier.supplierCode" 
+                            required
+                            pattern="^(?!\s*$).+"
+                            maxlength="64" 
+                            pattern="^(?!\s*$).+"/>
+                            <div
+                            *ngIf="supplierForm?.controls?.supplierCode?.errors?.required && !supplierCodeInput.pristine">
+                            <span
+                                class="form-text text-danger text-left">{{
+                                'Trường này là bắt buộc' |
+                                localize }}</span>
+                            </div>
+                            <div
+                                *ngIf="supplierForm?.controls?.supplierCode?.errors?.pattern&& !supplierCodeInput.pristine">
+                                <span
+                                    class="form-text text-danger text-left">{{
+                                    'Ký tự không hợp lệ' |
+                                    localize
+                                    }}</span>
+                            </div>
+                    </div>
+                    
+                    <div class="mb-5">
+                        <label class="form-label">{{ 'Tên nhà cung cấp' |
+                            localize }} <span style="color: red;">*</span></label>
+                        <input
+                            id="supplierName"
+                            #supplierNameInput="ngModel"
+                            class="form-control"
+                            type="text"
+                            name="supplierName"
+                            [(ngModel)]="supplier.supplierName"
+                            required
+                            pattern="^(?!\s*$).+"
+                            maxlength="64" 
+                            pattern="^(?!\s*$).+"/>
+                            <div
+                            *ngIf="supplierForm?.controls?.supplierName?.errors?.required && !supplierNameInput.pristine">
+                            <span
+                                class="form-text text-danger text-left">{{
+                                'Trường này là bắt buộc' |
+                                localize }}</span>
+                            </div>
+                            <div
+                                *ngIf="supplierForm?.controls?.supplierName?.errors?.pattern&& !supplierNameInput.pristine">
+                                <span
+                                    class="form-text text-danger text-left">{{
+                                    'Ký tự không hợp lệ' |
+                                    localize
+                                    }}</span>
+                            </div>
+                            <!-- <div
+                            *ngIf="!supplierNameInput.valid && !supplierNameInput.pristine">
+                            <span class="form-text text-danger text-left">{{
+                                '' | localize }}</span>
+                        </div> -->
+                        
+                    </div>
+                    <div class="mb-5">
+                        <label class="form-label">{{ 'Tên công ty' | localize }}
+                            <span style="color: red;">*</span></label>
+                        <input
+                            id="CompanyName"
+                            #companyNameInput="ngModel"
+                            class="form-control"
+                            type="text"
+                            name="CompanyName"
+                            [(ngModel)]="supplier.companyName"
+                            pattern="^(?!\s*$).+"
+                            required
+                            maxlength="64" 
+                            pattern="^(?!\s*$).+"/>
+                            <div
+                            *ngIf="supplierForm?.controls?.CompanyName?.errors?.required && !companyNameInput.pristine">
+                            <span
+                                class="form-text text-danger text-left">{{
+                                'Trường này là bắt buộc' |
+                                localize }}</span>
+                            </div>
+                            <div
+                                *ngIf="supplierForm?.controls?.CompanyName?.errors?.pattern&& !companyNameInput.pristine">
+                                <span
+                                    class="form-text text-danger text-left">{{
+                                    'Ký tự không hợp lệ' |
+                                    localize
+                                    }}</span>
+                            </div>
+                    </div>
+                    <div class="mb-5">
+                        <label class="form-label">{{ 'Email' | localize }} <span
+                                style="color: red;">*</span></label>
+                        <input
+                            id="Email"
+                            #emailInput="ngModel"
+                            class="form-control"
+                            type="emal"
+                            name="Email"
+                            email
+                            [(ngModel)]="supplier.email"
+                            required
+                            maxlength="64" 
+                            pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
+                            />
+                            <div
+                            *ngIf="supplierForm?.controls?.Email?.errors?.required && !emailInput.pristine">
+                            <span
+                                class="form-text text-danger text-left">{{
+                                'Trường này là bắt buộc' |
+                                localize }}</span>
+                            </div>
+                            <div
+                                *ngIf="supplierForm?.controls?.Email?.errors?.pattern && !emailInput.pristine">
+                                <span
+                                    class="form-text text-danger text-left">{{
+                                    'Email không hợp lệ' |
+                                    localize
+                                    }}</span>
+                            </div>
+                            
+                        <!-- <validation-messages [formCtrl]="emailInput"></validation-messages> -->
+                    </div>
+                    <div class="mb-5">
+                        <label class="form-label">{{ 'Link dữ liệu lấy báo cáo'
+                            | localize }}
+                            <span style="color: red;">*</span></label>
+                        <input
+                            id="SFTPLink"
+                            #sFTPLinkInput="ngModel"
+                            class="form-control"
+                            type="url"
+                            name="SFTPLink"
+                            [(ngModel)]="supplier.sFTPLink"
+                            required
+                            />
+                            <div
+                            *ngIf="supplierForm?.controls?.SFTPLink?.errors?.required && !emailInput.pristine">
+                            <span
+                                class="form-text text-danger text-left">{{
+                                'Trường này là bắt buộc' |
+                                localize }}</span>
+                            </div>
+                            <!-- <div
+                                *ngIf="supplierForm?.controls?.SFTPLink?.errors?.pattern && !emailInput.pristine">
+                                <span
+                                    class="form-text text-danger text-left">{{
+                                    'Link không hợp lệ' |
+                                    localize
+                                    }}</span>
+                            </div> -->
+                    </div>
+                    <div class="mb-5 row">
+                        <div class="col-md-6 col">
+                            <label class="form-label">{{ 'Tài khoản' | localize
+                                }}</label>
+                            <input
+                                id="sFTPLinkAccount"
+                                #roleNameInput="ngModel"
+                                class="form-control"
+                                type="text"
+                                name="sFTPLinkAccount"
+                                [(ngModel)]="supplier.sFTPLinkAccount"
+                                maxlength="64" >
+                        </div>
+                        <div class="col-md-6 col">
+                            <label class="form-label">{{ 'Mật khẩu' | localize
+                                }}</label>
+                            <input
+                                id="sFTPLinkPassword"
+                                #sFTPLinkPasswordInput="ngModel"
+                                class="form-control"
+                                type="text"
+                                name="sFTPLinkPassword"
+                                [(ngModel)]="supplier.sFTPLinkPassword"
+                                maxlength="64" >
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <label class="form-label">{{ 'Mô tả' | localize }}</label>
+                        
+                        <textarea
+                            id="Description"
+                            #descriptionInput="ngModel"
+                            class="form-control"
+                            type="text"
+                            name="Description"
+                            [(ngModel)]="supplier.description"
+                            maxlength="300"
+                            ></textarea>
+                        <validation-messages [formCtrl]="descriptionInput"></validation-messages>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button
+                        [disabled]="saving"
+                        type="button"
+                        class="btn btn-light-primary fw-bold"
+                        (click)="close()">
+                        {{ 'Cancel' | localize }}
+                    </button>
+                    <button
+                        type="submit"
+                        class="btn btn-primary fw-bold"
+                        [buttonBusy]="saving"
+                        [disabled]="!supplierForm.form.valid">
+                        <i class="fa fa-save"></i>
+                        <span>{{ 'Save' | localize }}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

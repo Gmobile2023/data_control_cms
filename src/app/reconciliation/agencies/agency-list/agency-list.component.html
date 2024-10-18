@@ -1,0 +1,156 @@
+<div [@routerTransition]>
+    <sub-header [title]="'Đại lý' | localize">
+        <div role="actions">
+            <button
+                class="btn btn-primary float-end"
+                (click)="createAgency()"
+                *ngIf="'Pages.Administration.Agency.Create' | permission"
+                class="btn btn-primary float-end"
+                >
+                <i class="fa fa-plus btn-md-icon"></i>
+                <span class="d-none d-md-inline-block">
+                    {{ 'Tạo mới' | localize }}
+                </span>
+            </button>
+        </div>
+    </sub-header>
+
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <form class="form" autocomplete="new-password">
+                    <div>
+                        <div class="row align-items-center mb-5">
+                            <div class="col-md-9 col-xl-9 col-sm-12">
+                                <div class="m-form__group align-items-center">
+                                    <div class="input-group">
+                                        <input
+                                            [(ngModel)]="filterText"
+                                            name="filterText"
+                                            autoFocus
+                                            class="form-control m-input"
+                                            placeholder="Tên đại lý"
+                                            type="text" />
+                                        <button (click)="getAgencies()"
+                                            class="btn btn-primary"
+                                            type="submit">
+                                            <i class="flaticon-search-1"
+                                                [attr.aria-label]="l('Search')"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+                <div class="row align-items-center">
+                    <div class="primeng-datatable-container">
+                        <p-table [value]="agencies"
+                            [tableStyle]="{ 'min-width': '50rem' }">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Mã đại lý</th>
+                                    <th>Tên đại lý</th>
+                                    <th>Công ty</th>
+                                    <th>Email</th>
+                                    <th>Mô tả</th>
+                                    <th
+                                        style="min-width: 130px"
+                                        [hidden]="
+                                            !(
+                                                [
+                                                    'Pages.Administration.Agency.Edit',
+                                                    'Pages.Administration.Agency.Delete'
+                                                ] | permissionAny
+                                            )
+                                        ">
+                                        {{ 'Actions' | localize }}
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-product let-rowIndex="rowIndex">
+                                <tr>
+                                    <td>{{ rowIndex + 1 }}</td>
+                                    <td>{{ product.agencyCode }}</td>
+                                    <td>{{ product.agencyName }}</td>
+                                    <td>{{ product.companyName }}</td>
+                                    <td>{{ product.email }}</td>
+                                    <td>{{ product.description }}</td>
+                                    <td
+                                        style="min-width: 130px"
+                                        [hidden]="
+                                        !(
+                                            [
+                                            'Pages.Administration.Agency.Edit',
+                                            'Pages.Administration.Agency.Delete'
+                                            ] | permissionAny
+                                        )
+                                    ">
+                                        <div class="btn-group" dropdown
+                                            placement="bottom left"
+                                            container="body">
+                                            <button
+                                                id="dropdownButton"
+                                                type="button"
+                                                class="btn btn-primary btn-sm dropdown-toggle"
+                                                dropdownToggle
+                                                aria-controls="dropdownMenu">
+                                                <i class="fa fa-cog"></i>
+                                                <span class="caret"></span>
+                                                {{ 'Actions' | localize }}
+                                            </button>
+                                            <ul
+                                                id="dropdownMenu"
+                                                class="dropdown-menu"
+                                                role="menu"
+                                                *dropdownMenu
+                                                aria-labelledby="dropdownButton">
+
+                                                <li
+                                                    *ngIf="'Pages.Administration.Agency.Edit' | permission"
+                                                    role="menuitem">
+                                                    <a
+                                                        href="javascript:;"
+                                                        class="dropdown-item"
+                                                        (click)="createAgencyModal.show(product.agencyId)">
+                                                        {{ 'Chỉnh sửa' |
+                                                        localize }}
+                                                    </a>
+                                                </li>
+
+                                                <li
+                                                    *ngIf="'Pages.Administration.Agency.Delete' | permission"
+                                                    role="menuitem">
+                                                    <a
+                                                        href="javascript:;"
+                                                        class="dropdown-item"
+                                                        (click)="deleteAgency(product)">
+                                                        {{ 'Xóa' | localize }}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <div class="primeng-no-data text-center mt-2" *ngIf="paginator.total == 0">
+                            {{ 'NoData' | localize }}
+                        </div>
+                        <div class="mt-3" *ngIf="paginator.total > 0">
+                            <p-paginator (onPageChange)="onPageChange($event)"
+                                [rows]="paginator.pageSize"
+                                [totalRecords]="paginator.total"
+                                [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <agency-create #createAgencyModal (getAgencies)="getAgencies()"></agency-create>
+</div>

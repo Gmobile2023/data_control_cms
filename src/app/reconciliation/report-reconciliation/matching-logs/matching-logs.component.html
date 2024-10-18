@@ -1,0 +1,58 @@
+<div
+    appBsModal
+    #matchingLogsModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="matchingLogsModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static', keyboard: !saving }">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span>Lịch sử thay đổi</span>
+                    </h4>
+                    <button
+                    type="button"
+                    class="btn-close"
+                    (click)="close()"
+                    >
+                </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row align-items-center">
+                        <div class="primeng-datatable-container">
+                            <p-table [value]="datas"
+                                [tableStyle]="{ 'min-width': '50rem' }">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Dữ liệu nội bộ</th>
+                                        <th>Dữ liệu nhà cung cấp</th>
+                                        <th>Trạng thái khớp</th>
+                                        <th>Thời gian</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+                                    <tr>
+                                        <td>{{rowIndex + 1}}</td>
+                                        <td>{{rowData.recordInternal}}</td>
+                                        <td>{{rowData.recordSupplier}}</td>
+                                        <td>{{rowData.matchingStatus == 1 ? 'Khớp dữ liệu' : 'Đánh dấu khớp'}}</td>
+                                        <td>{{rowData.creationTime  | date:'dd/MM/yyy h:mm'}}</td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+    
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+
+                </div>
+        </div>
+    </div>
+</div>
+

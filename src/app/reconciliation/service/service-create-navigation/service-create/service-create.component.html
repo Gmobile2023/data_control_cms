@@ -1,0 +1,555 @@
+<link rel="stylesheet" href="service-create.component.css">
+<div [@routerTransition] id="pannelCreateService">
+    <sub-header *ngIf="!_serviceService.service.id"
+        [title]="'Thêm mới dịch vụ đối soát' | localize">
+    </sub-header>
+    <sub-header *ngIf="_serviceService.service.id"
+        [title]="'Cập nhật dịch vụ đối soát' | localize">
+    </sub-header>
+
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <form #serviceCreateForm="ngForm"
+                        autocomplete="new-password">
+                        <div class="row mb-5 align-items-center">
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <label class="form-label">{{ 'Tên dịch vụ'
+                                    |
+                                    localize }} <span style="color: red;">*</span></label>
+                            </div>
+                            <div class="col-md-10 col-sm-12 col-12">
+                                <input
+                                    [(ngModel)]="_serviceService.service.serviceName"
+                                    #serviceNameInput="ngModel"
+                                    id="serviceName"
+                                    class="form-control"
+                                    type="text"
+                                    pattern="^(?!\s*$).+"
+                                    name="serviceName"
+                                    required
+                                    maxlength="64"
+                                    placeholder="Nhập tên dịch vụ"
+                                    pattern="^(?!\s*$).+" />
+                                <div
+                                    *ngIf="serviceCreateForm?.controls?.serviceName?.errors?.required && !serviceNameInput.pristine">
+                                    <span
+                                        class="form-text text-danger text-left">{{
+                                        'Trường này là bắt buộc' |
+                                        localize }}</span>
+                                </div>
+                                <div
+                                    *ngIf="serviceCreateForm?.controls?.serviceName?.errors?.pattern&& !serviceNameInput.pristine">
+                                    <span
+                                        class="form-text text-danger text-left">{{
+                                        'Ký tự không hợp lệ' |
+                                        localize
+                                        }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-5 align-items-center">
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <label class="form-label">{{ 'Mã dịch vụ'
+                                    |
+                                    localize }} <span style="color: red;">*</span></label>
+                            </div>
+                            <div class="col-md-10 col-sm-12 col-12">
+                                <input
+                                    [(ngModel)]="_serviceService.service.serviceCode"
+                                    #serviceCodeInput="ngModel"
+                                    id="serviceCode"
+                                    class="form-control"
+                                    type="text"
+                                    name="serviceCode"
+                                    required
+                                    maxlength="64"
+                                    placeholder="Nhập mã dịch vụ"
+                                    pattern="^(?!\s*$).+" />
+                                <div
+                                    *ngIf="serviceCreateForm?.controls?.serviceCode?.errors?.required && !serviceCodeInput.pristine">
+                                    <span
+                                        class="form-text text-danger text-left">{{
+                                        'Trường này là bắt buộc' |
+                                        localize }}</span>
+                                </div>
+                                <div
+                                    *ngIf="serviceCreateForm?.controls?.serviceCode?.errors?.pattern&& !serviceCodeInput.pristine">
+                                    <span
+                                        class="form-text text-danger text-left">{{
+                                        'Ký tự không hợp lệ' |
+                                        localize
+                                        }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-5 align-items-center">
+
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <label class="form-label">{{ 'Loại dịch vụ' |
+                                    localize }}</label>
+                                <span style="color: red;"> *</span>
+                            </div>
+                            <div class="col-md-10 col-sm-12 col-12">
+                                <p-dropdown 
+                                    [options]="listItems"
+                                    [(ngModel)]="_serviceService.service.serviceTypeId"
+                                    [filter]="true"
+                                    optionLabel="serviceTypeName"
+                                    optionValue="id"
+                                    placeholder="Chọn loại dịch vụ"
+                                    name="serviceTypeId"
+                                    required
+                                    #serviceType="ngModel"
+                                    [style]="{'width':'100%'}">
+                                </p-dropdown>
+
+                                <validation-messages
+                                    [formCtrl]="serviceType"></validation-messages>
+
+                            </div>
+                        </div>
+                        <div class="row mb-5 align-items-center ">
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <label class="form-label">{{
+                                    'Định dạng tên file mẫu BF' |
+                                    localize }} </label>
+                                <span style="color: red;"> *</span>
+                            </div>
+
+                            <div class="col-md-8 col-sm-12 col-12">
+                                <input
+                                    #fileNameFormat="ngModel"
+                                    [(ngModel)]="_serviceService.service.fileNameFormat"
+                                    name="fileNameFormat"
+                                    id="fileNameFormat"
+                                    class="form-control"
+                                    type="text"
+                                    required
+                                    (input)="checkFileNameFormat($event)" />
+
+                                <span *ngIf="invalidFileNameFormat"
+                                    class="text-danger "
+                                    style="font-style: italic; font-size: 13px;">Lưu
+                                    ý: điền đúng định dạng 2 tham số Date và
+                                    TenDichVu <p class="text-danger">
+                                        chưa nhập đủ tham số vui lòng nhập lại !
+                                    </p></span>
+
+                                <validation-messages
+                                    [formCtrl]="fileNameFormat"></validation-messages>
+                            </div>
+                            <div class="col-md-1 col-sm-12 col-12"
+                                style="margin-left: 10px;">
+                                <button
+                                    type="button"
+                                    (click)="showDialog()"
+                                    class="round-button"><i
+                                        class="bi bi-info-lg"
+                                        style="font-size: 2em; display: block; margin: 0 auto;"></i></button>
+                                <p-dialog [(visible)]="visible"
+                                    [style]="{width: '20vw'}">
+                                    <p [innerHTML]="getPopoverContentAsHtml()"></p>
+                                </p-dialog>
+                            </div>
+                        </div>
+                        <div class="row mb-5 align-items-center">
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <label class="form-label">{{ 'Ngày lấy dữ liệu'
+                                    |
+                                    localize }} </label>
+                                <span style="color: red;"> *</span>
+                                <label class="form-label">{{ ' = {Date}   +' |
+                                    localize }} </label>
+                            </div>
+
+                            <div class="col-md-2 col-sm-5 col-12">
+                                <input
+                                    [(ngModel)]="_serviceService.service.daysDifference"
+                                    name="daysDifference"
+                                    id="daysDifference"
+                                    class="form-control"
+                                    type="number"
+                                    min="0" />
+                            </div>
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <span>ngày (số ngày lệch)</span>
+                            </div>
+                        </div>
+                        <div class="row mb-5 align-items-center">
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <label class="form-label">{{
+                                    'Mẫu BF & Nguồn dữ liệu' |
+                                    localize }}</label>
+                                <span style="color: red;"> *</span>
+                            </div>
+                            <div class="col-md-10 col-sm-12 col-12">
+                               
+                                <p-dropdown 
+                                    [options]="listItemsBF"
+                                    [(ngModel)]="_serviceService.service.bfSourceId"
+                                    [filter]="true"
+                                    optionLabel="fileName"
+                                    optionValue="batchFileId"
+                                    placeholder="Chọn mẫu bf"
+                                    name="bfSourceId"
+                                    required
+                                    #bfSource="ngModel"
+                                    [style]="{'width':'100%'}">
+                                </p-dropdown>
+
+                                <validation-messages
+                                    [formCtrl]="bfSource"></validation-messages>
+                            </div>
+                        </div>
+                        <div class="row mb-5 align-items-center">
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <label class="form-label">{{ 'Mô tả' |
+                                    localize }}</label>
+                            </div>
+                            <div class="col-md-10 col-sm-12 col-12">
+                                <textarea
+                                    rows="4"
+                                    [(ngModel)]="_serviceService.service.description"
+                                    id="description"
+                                    class="form-control"
+                                    type="text"
+                                    name="description"
+                                    maxlength="64"
+                                    placeholder="Thêm mô tả">
+                                </textarea>
+                                <!-- <validation-messages
+                                    [formCtrl]="FileNameInput"></validation-messages> -->
+                            </div>
+                        </div>
+                        <div class="row mb-5 align-items-center">
+                            <label class="form-label" style="font-weight: bold;">{{
+                                'Chu kỳ đối soát' |
+                                localize }}</label>
+
+                        </div>
+                        <div class="row mb-5 align-items-center">
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <label class="form-label">{{ 'Chu kỳ đối soát' |
+                                    localize }}</label>
+                                <span style="color: red;"> *</span>
+                            </div>
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <select
+                                    [(ngModel)]="_serviceService.service.cycle"
+                                    id="cycle"
+                                    #cycle="ngModel"
+                                    class="form-control"
+                                    type="text"
+                                    name="cycle"
+                                    required
+                                    maxlength="64">
+                                    <option value="1">Daily</option>
+                                    <option value="2">Weekly</option>
+                                    <option value="3">Monthly</option>
+                                </select>
+                                <validation-messages
+                                    [formCtrl]="cycle"></validation-messages>
+                            </div>
+                        </div>
+                        <div class="row mb-5 align-items-center">
+                            <div class="col-md-2 col-sm-12 col-12 ">
+                                <label class="form-label">{{ 'Thời gian xuất' |
+                                    localize }} </label>
+                                <span style="color: red;"> *</span>
+                            </div>
+                            <div class="col-md-2 col-sm-12 col-12 my-custom">
+                                <p-calendar [(ngModel)]="_serviceService.date"
+                                    [showTime]="true"
+                                    [timeOnly]="true"
+                                    #timeValue="ngModel"
+                                    name="timeValue"
+                                    required>
+                                </p-calendar>
+                            </div>
+                            <div class="col-md-2 col-sm-12 col-12">
+                                <select
+                                    [(ngModel)]="_serviceService.day"
+                                    name="weekday"
+                                    id="weekday"
+                                    class="form-control"
+                                    *ngIf="_serviceService.service.cycle == 2">
+                                    <option
+                                        *ngFor="let item of _serviceService.lstWeekDays"
+                                        [ngValue]="item.value">{{item.text}}</option>
+                                </select>
+
+                                <select
+                                    [(ngModel)]="_serviceService.day"
+                                    name="dayOfMonth"
+                                    id="dayOfMonth"
+                                    class="form-control"
+                                    *ngIf="_serviceService.service.cycle == 3">
+                                    <option
+                                        *ngFor="let item of _serviceService.lstMonthDays"
+                                        [ngValue]="item.value">{{item.text}}</option>
+                                </select>
+
+                            </div>
+                        </div>
+                        <div class="row mb-5 align-items-center">
+                            <label class="form-label" style="font-weight: bold;">{{
+                                'Gửi báo cáo sau đối soát' |
+                                localize }}</label>
+                        </div>
+
+                        <div class="row mb-5 align-items-center">
+                            <div class="col-md-1 col-sm-12 col-12" style="width:30px;">
+                                <input
+                                    name="checkReport"
+                                    type="checkbox"
+                                    id="checkReport"
+                                    class="checkReport form-check-input"
+                                    [(ngModel)]="_serviceService.service.sendReportChecked"
+                                    (change)="onChangeSendReportChecked()">
+                            </div>
+                            <div class="col-md-3 col-sm-12 col-12">
+                                <span>Gửi báo cáo sau đối soát</span>
+                            </div>
+                        </div>
+                        <div class="row mb-5 align-items-center"
+                            *ngIf="_serviceService.service.sendReportChecked">
+                            <div class="col-md-1 col-sm-12 col-12" style="width:30px;">
+                                <input
+                                    name="checkUploadFile1"
+                                    type="checkbox"
+                                    id="checkUploadFile1"
+                                    class="checkUploadFile form-check-input"
+                                    [(ngModel)]="_serviceService.service.isUploadFile">
+                            </div>
+                            <div class="col-md-3 col-sm-12 col-12">
+                                <span>Upload File</span>
+                            </div>
+                        </div>
+
+                        <div *ngIf="_serviceService.service.isUploadFile">
+                            <div class="row mb-5 align-items-center">
+                                <div class="col-md-2 col-sm-12 col-12">
+                                    <label class="form-label">{{
+                                        'Upload file báo cáo' |
+                                        localize }}</label>
+                                    <span style="color: red;"> *</span>
+                                </div>
+                                <div class="col-md-10 col-sm-12 col-12">
+                                    <input
+                                        [(ngModel)]="_serviceService.service.uploadUrl"
+                                        id="uploadUrl"
+                                        #urltb="ngModel"
+                                        required
+                                        class="form-control"
+                                        type="url"
+                                        name="uploadUrl"
+                                        placeholder="Thêm file báo cáo" />
+                                    <div
+                                        *ngIf="serviceCreateForm?.controls?.uploadUrl?.errors?.required && !urltb.pristine">
+                                        <span
+                                            class="form-text text-danger text-left">{{
+                                            'Trường này là bắt buộc' | localize
+                                            }}</span>
+                                    </div>
+                                    <!-- <div
+                                        *ngIf="serviceCreateForm?.controls?.uploadUrl?.errors?.pattern && !urltb.pristine">
+                                        <span
+                                            class="form-text text-danger text-left">{{
+                                            'Link không đúng định dạng' |
+                                            localize
+                                            }}</span>
+                                    </div> -->
+                                </div>
+                            </div>
+                            <div class="row mb-5 align-items-center">
+                                <div class="col-md-2 col-sm-12 col-12">
+                                    <label class="form-label">{{
+                                        'Tài khoản' |
+                                        localize }}</label>
+                                </div>
+                                <div class="col-md-4 col-sm-12 col-12">
+                                    <input
+                                        [(ngModel)]="_serviceService.service.uploadUrlAccount"
+                                        id="uploadUrlAccount"
+                                        #uploadUrlAccount="ngModel"
+                                        class="form-control"
+                                        type="text"
+                                        maxlength="100"
+                                        name="uploadUrlAccount"
+                                        placeholder="Nhập tài khoản"
+                                        pattern="^(?!\s*$).+" />
+                                    <div
+                                        *ngIf="serviceCreateForm?.controls?.uploadUrlAccount?.errors?.required && !uploadUrlAccount.pristine">
+                                        <span
+                                            class="form-text text-danger text-left">{{
+                                            'Trường này là bắt buộc' |
+                                            localize }}</span>
+                                    </div>
+                                    <div
+                                        *ngIf="serviceCreateForm?.controls?.uploadUrlAccount?.errors?.pattern&& !uploadUrlAccount.pristine">
+                                        <span
+                                            class="form-text text-danger text-left">{{
+                                            'Ký tự không hợp lệ' |
+                                            localize
+                                            }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-sm-12 col-12 text-center">
+                                    <label class="form-label">{{
+                                        'Mật khẩu' |
+                                        localize }}</label>
+                                </div>
+                                <div class="col-md-4 col-sm-12 col-12">
+                                    <input
+                                        [(ngModel)]="_serviceService.service.uploadUrlPassword"
+                                        id="uploadUrlPassword"
+                                        #uploadUrlAccount="ngModel"
+                                        class="form-control"
+                                        type="text"
+                                        maxlength="100"
+                                        name="uploadUrlPassword"
+                                        placeholder="Nhập mật khẩu"
+                                        pattern="^(?!\s*$).+" />
+                                    <div
+                                        *ngIf="serviceCreateForm?.controls?.uploadUrlPassword?.errors?.required && !uploadUrlAccount.pristine">
+                                        <span
+                                            class="form-text text-danger text-left">{{
+                                            'Trường này là bắt buộc' |
+                                            localize }}</span>
+                                    </div>
+                                    <div
+                                        *ngIf="serviceCreateForm?.controls?.uploadUrlPassword?.errors?.pattern&& !uploadUrlAccount.pristine">
+                                        <span
+                                            class="form-text text-danger text-left">{{
+                                            'Ký tự không hợp lệ' |
+                                            localize
+                                            }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-5 align-items-center"
+                            *ngIf="_serviceService.service.sendReportChecked">
+                            <div class="col-md-1 col-sm-12 col-12" style="width:30px;">
+                                <input
+                                    name="checkSendEMail1"
+                                    type="checkbox"
+                                    id="checkSendEMail1"
+                                    class="checkSendEMail form-check-input"
+                                    [(ngModel)]="_serviceService.service.isSendMail">
+                            </div>
+                            <div class="col-md-3 col-sm-12 col-12">
+                                <span>Gửi Email</span>
+                            </div>
+                        </div>
+
+                        <div *ngIf="_serviceService.service.isSendMail">
+                            <div class="row mb-5 align-items-center">
+                                <div class="col-md-2 col-sm-12 col-12">
+                                    <label class="form-label">{{ 'Email' |
+                                        localize }}</label>
+                                    <span style="color: red;"> *</span>
+                                </div>
+                                <div class="col-md-4 col-sm-12 col-12">
+                                    <input
+                                        [(ngModel)]="_serviceService.service.receiverMail"
+                                        id="receiverMail"
+                                        #emailtb="ngModel"
+                                        class="form-control"
+                                        type="text"
+                                        name="receiverMail"
+                                        required
+                                        placeholder="Nhập Email" />
+                                    <div
+                                        *ngIf="serviceCreateForm?.controls?.receiverMail?.errors?.required && !emailtb.pristine">
+                                        <span
+                                            class="form-text text-danger text-left">{{
+                                            'Trường này là bắt buộc' |
+                                            localize }}</span>
+                                    </div>
+                                </div>
+                                <!-- <div class="col-md-2 col-sm-12 col-12">
+                                    <label class="form-label">{{
+                                        'Gửi email khi khớp' |
+                                        localize }}</label>
+                                </div>
+                                <div class="col-md-1 col-sm-12 col-12">
+                                    <input
+                                        [(ngModel)]="_serviceService.service.isSendSuccessMail"
+                                        class="form-check-input" type="checkbox"
+                                        name="isSendSuccessMail"
+                                        id="isSendSuccessMail">
+                                </div>
+                                <div class="col-md-2 col-sm-12 col-12">
+                                    <label class="form-label">{{
+                                        'Gửi email khi lệch' |
+                                        localize }}</label>
+                                </div>
+                                <div class="col-md-1 col-sm-12 col-12">
+                                    <input class="form-check-input"
+                                        type="checkbox"
+                                        [(ngModel)]="_serviceService.service.isSendFailMail"
+                                        name="isSendFailMail"
+                                        id="isSendFailMail">
+                                </div> -->
+
+                            </div>
+                            <div class="row mb-5 align-items-center">
+                                <div class="col-md-2 col-sm-12 col-12">
+                                    <label class="form-label">{{
+                                        'Email template ' |
+                                        localize }}</label>
+                                    <span style="color: red;"> *</span>
+                                </div>
+                                <div class="col-md-4 col-sm-12 col-12">
+                                
+                                    <p-dropdown
+                                        [options]="_serviceService.emailTemplates"
+                                        [(ngModel)]="_serviceService.service.emailSendTemplateId"
+                                        [filter]="true"
+                                        optionLabel="emailTemplateName"
+                                        optionValue="id"
+                                        placeholder="Chọn mẫu email"
+                                        name="emailSendTemplateId"
+                                        required
+                                        #emailSendTemplateId="ngModel"
+                                        [style]="{'width':'100%'}">
+                                    </p-dropdown>
+                                    <validation-messages
+                                    [formCtrl]="emailSendTemplateId"></validation-messages>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <button
+                                [buttonBusy]="_serviceService.saving"
+                                type="button"
+                                (click)="complete()"
+                                [disabled]="!serviceCreateForm.form.valid || invalidFileNameFormat"
+                                class="btn btn-success fw-bold">
+                                <i class="fa fa-save"></i>
+                                <span>{{ 'Hoàn thành' | localize }}</span>
+                            </button>
+                            <button
+                                (click)="cancel()"
+                                type="button"
+                                class="btn btn-light-primary fw-bold">
+                                <span>{{ 'Hủy bỏ' | localize }}</span>
+                            </button>
+                            <button
+                                [routerLink]="['/app/reconciliation/service/service-create/supplier-list']"
+                                [queryParams]="{ serviceId: _serviceService.serviceId }"
+                                type="button"
+                                class="btn btn-primary fw-bold"
+                                [disabled]="!serviceCreateForm.form.valid || invalidFileNameFormat">
+                                <span>{{ 'Thêm nhà cung cấp' | localize }}</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

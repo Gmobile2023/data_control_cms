@@ -1,0 +1,10 @@
+diff a/src/app/shared/layout/nav/app-navigation.service.ts b/src/app/shared/layout/nav/app-navigation.service.ts	(rejected hunks)
+@@ -137,7 +137,7 @@
+                     ),
+                     new AppMenuItem('Loại dịch vụ'
+                         , ''
+-                        , 'flaticon-suitcase'
++                        , 'flaticon-diagram'
+                         , '/app/reconciliation/service-type'),
+                     new AppMenuItem('Mẫu BF'
+                         , 'Pages.Administration.BatchFile'

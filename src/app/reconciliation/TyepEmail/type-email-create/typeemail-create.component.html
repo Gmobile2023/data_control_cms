@@ -1,0 +1,135 @@
+<div appBsModal
+#createOrEditModal="bs-modal"
+class="modal fade centered-modal"
+tabindex="-1"
+role="dialog"
+aria-labelledby="createOrEditModal"
+aria-hidden="true"
+[config]="{ backdrop: 'static', keyboard: !saving }">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <form *ngIf="active" #typeEmailCreateForm="ngForm"
+        (ngSubmit)="save()" autocomplete="new-password">
+          <div class="modal-header">
+            <h5 class="modal-title">Thêm mới loại mẫu email</h5>
+            <button type="button" class="btn-close" (click)="close()"></button>
+          </div>
+          <div class="modal-body">
+              <div class="row mb-5 align-items-center">
+                  <div class="col-md-3 col-sm-12 col-12">
+                      <label class="form-label">{{
+                          'Loại mẫu Email'
+                          |
+                          localize }} <span style="color: red;">*</span></label>
+                  </div>
+                  <div class="col-md-9 col-sm-12 col-12">
+                      <input 
+                        type="text" 
+                        class="form-control form-control-lg"
+                        id="emailTemplateTypeName"
+                        #TypeEmailNameInput="ngModel"
+                        name="emailTemplateTypeName"
+                        [(ngModel)]="typeEmail.emailTemplateTypeName"
+                        required
+                        maxlength="100"
+                        pattern="^(?!\s*$).+"
+                        required
+                        >
+                        <div
+                                    *ngIf="TypeEmailNameInput.hasError('pattern') && !TypeEmailNameInput.pristine">
+                                    <span
+                                        class="form-text text-danger text-left">{{
+                                        'Giá trị nhập vào không hợp lệ' |
+                                        localize }}</span>
+                                </div>
+                                <div
+                                    *ngIf="!TypeEmailNameInput.valid && TypeEmailNameInput.hasError('required') && !TypeEmailNameInput.pristine">
+                                    <span
+                                        class="form-text text-danger text-left">{{
+                                        'Không được để trống' | localize }}</span>
+                                </div>
+                  </div>
+              </div>
+              <div class="row mb-5 align-items-center">
+                <div class="col-md-3 col-sm-12 col-12">
+                    <label class="form-label">{{
+                        'Mã loại mẫu Email'
+                        |
+                        localize }} <span style="color: red;">*</span></label>
+                </div>
+                <div class="col-md-9 col-sm-12 col-12">
+                    <input 
+                      type="text" 
+                      class="form-control form-control-lg"
+                      id="emailTemplateTypeCode"
+                      #TypeEmailCodeInput="ngModel"
+                      name="emailTemplateTypeCode"
+                      [(ngModel)]="typeEmail.emailTemplateTypeCode"
+                      required
+                      maxlength="20"
+                      
+                      pattern="^(?!\s*$).+"
+                      
+                        required
+                        >
+                        <div
+                                    *ngIf="TypeEmailCodeInput.hasError('pattern') && !TypeEmailCodeInput.pristine">
+                                    <span
+                                        class="form-text text-danger text-left">{{
+                                        'Giá trị nhập vào không hợp lệ' |
+                                        localize }}</span>
+                                </div>
+                                <div
+                                    *ngIf="!TypeEmailCodeInput.valid && TypeEmailCodeInput.hasError('required') && !TypeEmailCodeInput.pristine">
+                                    <span
+                                        class="form-text text-danger text-left">{{
+                                        'Không được để trống' | localize }}</span>
+                                </div>
+                                
+                </div>
+            </div>
+            <div class="row mb-5 align-items-center">
+                <div class="col-md-3 col-sm-12 col-12">
+                    <label class="form-label" >{{ 'Mô tả' |
+                        localize }} 
+                    </label>
+                </div>
+                <p-editor 
+                  class="form-control form-control-lg" 
+                  placeholder="Nhập nội dung  mẫu Email"
+                  name="description"
+                  class="description"
+                  [style]="{ height: '290px' }"
+                  [(ngModel)]="typeEmail.description">
+              </p-editor>
+
+
+            </div>
+          </div>
+              <div class="d-flex justify-content-end">
+
+                <button
+                    type="button"
+                    class="btn btn-light-primary fw-bold"
+                    [routerLink]="['/app/reconciliation/typeEmail']"
+                    (click)="close()">
+
+                    <span class="d-none d-md-inline-block">
+                        {{ 'Thoát' | localize }}
+                    </span>
+                </button>
+                <button
+                    *ngIf="'Pages.Administration.EmailTemplateType.Create' | permission"
+                    [buttonBusy]="saving"
+                    type="submit"
+                    class="btn btn-primary fw-bold"
+                    [disabled]="!typeEmailCreateForm.form.valid">
+                    <i class="fa fa-save"></i>
+                    <span>{{ 'Thêm' | localize }}</span>
+                </button>
+
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>

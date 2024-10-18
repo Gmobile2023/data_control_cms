@@ -1,0 +1,15 @@
+.centered-modal .modal-content {
+    padding: 20px; /* Thay 20px bằng giá trị bạn muốn */
+}
+
+.round-button {
+    width: 40px; /* Đặt kích thước chiều rộng và chiều cao theo ý muốn */
+    height: 40px;
+    border-radius: 50%; /* Biến nút thành hình tròn */
+    background-color: black; /* Đặt màu nền thành màu đen */
+    color: white; /* Đặt màu chữ thành trắng hoặc màu bạn mong muốn */
+    text-align: center;
+    line-height: 40px; /* Để chữ ở giữa nút */
+    cursor: pointer; 
+    border: none; /* Loại bỏ viền */
+}

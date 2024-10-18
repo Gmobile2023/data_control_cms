@@ -1,0 +1,404 @@
+<div [@routerTransition]>
+    <sub-header
+        [title]="'Cấu hình báo cáo sau đối soát' | localize">
+    </sub-header>
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <div class="row align-items-center mx-3">
+                    <form #serviceCreateForm="ngForm"
+                        autocomplete="new-password">
+                        <div class="modal-body">
+                            <div>
+                                <label class="form-label mb-4">{{
+                                    'Thông tin ftp server nội bộ' }}</label>
+                                <div class="row mb-5 align-items-center">
+                                    <div class="col-md-2 col-sm-12 col-12">
+                                        <label class="form-label">{{
+                                            'Link upload' }}</label>
+                                        <span style="color: red;"> *</span>
+                                    </div>
+                                    <div class="col-md-10 col-sm-12 col-12">
+                                        <input
+                                            [(ngModel)]="_manageService.dataService.ftpLinkInternal"
+                                            id="ftpLinkInternal"
+                                            #ftpLinkInternal="ngModel"
+                                            required
+                                            class="form-control"
+                                            type="url"
+                                            name="ftpLinkInternal"
+                                            placeholder="Đường dẫn" />
+                                        <validation-messages
+                                            [formCtrl]="ftpLinkInternal"></validation-messages>
+                                        <!-- <div
+                                            *ngIf="serviceCreateForm?.controls?.ftpLinkInternal?.errors?.pattern && !ftpLinkInternal.pristine">
+                                            <span
+                                                class="form-text text-danger text-left">{{
+                                                'Link không đúng định dạng' |
+                                                localize
+                                                }}</span>
+                                        </div> -->
+                                    </div>
+                                </div>
+                                <div class="row mb-5 align-items-center">
+                                    <div class="col-md-2 col-sm-12 col-12">
+                                        <label class="form-label">{{
+                                            'Tài khoản' |
+                                            localize }}</label>
+                                    </div>
+                                    <div class="col-md-4 col-sm-12 col-12">
+                                        <input
+                                            [(ngModel)]="_manageService.dataService.ftpAccountInternal"
+                                            id="ftpAccountInternal"
+                                            #ftpAccountInternal="ngModel"
+                                            class="form-control"
+                                            type="text"
+                                            maxlength="100"
+                                            name="ftpAccountInternal"
+                                            placeholder="Nhập tài khoản"
+                                            pattern="^(?!\s*$).+" />
+
+                                        <div
+                                            *ngIf="serviceCreateForm?.controls?.ftpAccountInternal?.errors?.pattern&& !ftpAccountInternal.pristine">
+                                            <span
+                                                class="form-text text-danger text-left">{{
+                                                'Ký tự không hợp lệ' |
+                                                localize
+                                                }}</span>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="col-md-2 col-sm-12 col-12 text-center">
+                                        <label class="form-label">{{
+                                            'Mật khẩu' |
+                                            localize }}</label>
+                                    </div>
+                                    <div class="col-md-4 col-sm-12 col-12">
+                                        <input
+                                            [(ngModel)]="_manageService.dataService.ftpPasswordInternal"
+                                            id="ftpPasswordInternal"
+                                            #ftpPasswordInternal="ngModel"
+                                            class="form-control"
+                                            type="text"
+                                            maxlength="100"
+                                            name="ftpPasswordInternal"
+                                            placeholder="Nhập mật khẩu"
+                                            pattern="^(?!\s*$).+" />
+
+                                        <div
+                                            *ngIf="serviceCreateForm?.controls?.ftpPasswordInternal?.errors?.pattern&& !ftpPasswordInternal.pristine">
+                                            <span
+                                                class="form-text text-danger text-left">{{
+                                                'Ký tự không hợp lệ' |
+                                                localize
+                                                }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-5 align-items-center">
+                                <div class="col-md-2 col-sm-12 col-12">
+                                    <label class="form-label">{{
+                                        'Gửi báo cáo sau đối soát' |
+                                        localize }}</label>
+                                    
+                                </div>
+                                <div class="col-md-1 col-sm-12 col-12"
+                                    style="width:30px;">
+                                    <input
+                                        name="_manageService.isSendReport"
+                                        type="checkbox"
+                                        id="_manageService.isSendReport"
+                                        class="checkReport form-check-input"
+                                        [(ngModel)]="_manageService.isSendReport"
+                                        (change)="CheckBoxSendReportChange()" />
+                                </div>
+                            </div>
+
+                            <div class="row mb-5 align-items-center"
+                                *ngIf="_manageService.isSendReport">
+                                <div class="col-md-2 col-sm-12 col-12">
+                                    <label class="form-label">{{
+                                        'Gửi email' |
+                                        localize }}</label>
+                                </div>
+                                <div class="col-md-1 col-sm-12 col-12"
+                                    style="width:30px;">
+                                    <input
+                                        name="isSendMail"
+                                        type="checkbox"
+                                        id="isSendMail"
+                                        class="checkSendEMail form-check-input"
+                                        [(ngModel)]="_manageService.dataService.isSendMail">
+                                </div>
+                            </div>
+
+                            <div *ngIf="_manageService.dataService.isSendMail">
+                                <div class="row mb-5 align-items-center">
+                                    <div class="col-md-2 col-sm-12 col-12">
+                                        <label class="form-label">{{ 'Email' |
+                                            localize }}</label>
+                                        <span style="color: red;"> *</span>
+                                    </div>
+                                    <div class="col-md-4 col-sm-12 col-12">
+                                        <input
+                                            [(ngModel)]="_manageService.dataService.toEmail"
+                                            id="toEmail"
+                                            #toEmail="ngModel"
+                                            class="form-control"
+                                            type="text"
+                                            name="toEmail"
+                                            required
+                                            placeholder="Nhập Email" />
+                                        <validation-messages
+                                            [formCtrl]="toEmail"></validation-messages>
+                                    </div>
+                                </div>
+                                <div class="row mb-5 align-items-center">
+                                    <div class="col-md-2 col-sm-12 col-12">
+                                        <label class="form-label">{{
+                                            'Email template ' |
+                                            localize }}</label>
+                                        <span style="color: red;"> *</span>
+                                    </div>
+                                    <div class="col-md-4 col-sm-12 col-12">
+                                        <p-dropdown
+                                            [(options)]="serviceService.emailTemplates"
+                                            [(ngModel)]="_manageService.dataService.emailTemplateId"
+                                            [filter]="true"
+                                            optionLabel="emailTemplateName"
+                                            optionValue="id"
+                                            placeholder="Chọn mẫu email"
+                                            name="emailSendTemplateId"
+                                            required
+                                            #emailSendTemplateId="ngModel"
+                                            [style]="{'width':'100%'}">
+                                        </p-dropdown>
+                                        <validation-messages
+                                            [formCtrl]="emailSendTemplateId"></validation-messages>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-5 align-items-center"
+                                *ngIf="_manageService.isSendReport">
+                                <div class="col-md-2 col-sm-12 col-12">
+                                    <label class="form-label">{{
+                                        'Upload file ' |
+                                        localize }}</label>
+                                </div>
+                                <div class="col-md-1 col-sm-12 col-12"
+                                    style="width:30px;">
+                                    <input
+                                        name="isUpload"
+                                        type="checkbox"
+                                        id="isUpload"
+                                        class="checkSendEMail form-check-input"
+                                        [(ngModel)]="_manageService.dataService.isUpload">
+                                </div>
+                            </div>
+
+                            <div *ngIf="_manageService.dataService.isUpload">
+                                <div class="row mb-5 align-items-center">
+                                    <div class="col-md-2 col-sm-12 col-12">
+                                        <label class="form-label">{{
+                                            'Link'  }}</label>
+                                        <span style="color: red;"> *</span>
+                                    </div>
+                                    <div class="col-md-10 col-sm-12 col-12">
+                                        <input
+                                            [(ngModel)]="_manageService.dataService.linkUpload"
+                                            id="linkUpload"
+                                            #linkUpload="ngModel"
+                                            required
+                                            class="form-control"
+                                            type="url"
+                                            name="linkUpload"
+                                            placeholder="Đường dẫn" />
+                                        <validation-messages
+                                            [formCtrl]="linkUpload"></validation-messages>
+                                        <!-- <div
+                                            *ngIf="serviceCreateForm?.controls?.linkUpload?.errors?.pattern && !linkUpload.pristine">
+                                            <span
+                                                class="form-text text-danger text-left">{{
+                                                'Link không đúng định dạng' |
+                                                localize
+                                                }}</span>
+                                        </div> -->
+                                    </div>
+                                </div>
+                                <div class="row mb-5 align-items-center">
+                                    <div class="col-md-2 col-sm-12 col-12">
+                                        <label class="form-label">{{
+                                            'Tài khoản' |
+                                            localize }}</label>
+                                    </div>
+                                    <div class="col-md-4 col-sm-12 col-12">
+                                        <input
+                                            [(ngModel)]="_manageService.dataService.linkUploadAccount"
+                                            id="linkUploadAccount"
+                                            #uploadUrlAccount="ngModel"
+                                            class="form-control"
+                                            type="text"
+                                            maxlength="100"
+                                            name="linkUploadAccount"
+                                            placeholder="Nhập tài khoản"
+                                            pattern="^(?!\s*$).+" />
+                                        <div
+                                            *ngIf="serviceCreateForm?.controls?.uploadUrlAccount?.errors?.required && !uploadUrlAccount.pristine">
+                                            <span
+                                                class="form-text text-danger text-left">{{
+                                                'Trường này là bắt buộc' |
+                                                localize }}</span>
+                                        </div>
+                                        <div
+                                            *ngIf="serviceCreateForm?.controls?.uploadUrlAccount?.errors?.pattern&& !uploadUrlAccount.pristine">
+                                            <span
+                                                class="form-text text-danger text-left">{{
+                                                'Ký tự không hợp lệ' |
+                                                localize
+                                                }}</span>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="col-md-2 col-sm-12 col-12 text-center">
+                                        <label class="form-label">{{
+                                            'Mật khẩu' |
+                                            localize }}</label>
+                                    </div>
+                                    <div class="col-md-4 col-sm-12 col-12">
+                                        <input
+                                            [(ngModel)]="_manageService.dataService.linkUploadPassword"
+                                            id="linkUploadPassword"
+                                            #uploadUrlAccount="ngModel"
+                                            class="form-control"
+                                            type="text"
+                                            maxlength="100"
+                                            name="linkUploadPassword"
+                                            placeholder="Nhập mật khẩu"
+                                            pattern="^(?!\s*$).+" />
+                                        <div
+                                            *ngIf="serviceCreateForm?.controls?.uploadUrlPassword?.errors?.required && !uploadUrlAccount.pristine">
+                                            <span
+                                                class="form-text text-danger text-left">{{
+                                                'Trường này là bắt buộc' |
+                                                localize }}</span>
+                                        </div>
+                                        <div
+                                            *ngIf="serviceCreateForm?.controls?.uploadUrlPassword?.errors?.pattern&& !uploadUrlAccount.pristine">
+                                            <span
+                                                class="form-text text-danger text-left">{{
+                                                'Ký tự không hợp lệ' |
+                                                localize
+                                                }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- <div class="row mb-5 align-items-center">
+                                <div class="col-md-3 col-sm-12 col-12">
+                                    <span>Báo cáo thống kê thông tin gói cước</span>
+                                </div>
+                                <div class="col-md-1 col-sm-12 col-12"
+                                    style="width:30px;">
+                                    <input
+                                        name="isStatisticalPackOfData"
+                                        type="checkbox"
+                                        id="isStatisticalPackOfData"
+                                        class="checkSendEMail form-check-input"
+                                        [(ngModel)]="_manageService.dataService.isStatisticalPackOfData">
+                                </div>
+                            </div> -->
+                            <div class="row mb-5 align-items-center">
+                                <div class="col-md-2 col-sm-12 col-12">
+                                    <label class="form-label">{{
+                                        'Định dạng tên file báo cáo thông tin gói cước' |
+                                        localize }} <span style="color: red;"> *</span></label>
+                                    
+                                </div>
+                                <div class="col-md-10 col-sm-12 col-12">
+                                    <input
+                                        [(ngModel)]="_manageService.dataService.fileNameReportPOD"
+                                        id="fileNameReportPOD"
+                                        #fileNameReportPOD="ngModel"
+                                        required
+                                        class="form-control"
+                                        type="url"
+                                        name="fileNameReportPOD"
+                                        placeholder="Định dạng tên file báo cáo" />
+                                    <validation-messages
+                                        [formCtrl]="fileNameReportPOD"></validation-messages>
+                                </div>
+                            </div>
+
+                            <!-- <div class="row mb-5 align-items-center">
+                                <div class="col-md-3 col-sm-12 col-12">
+                                    <span>Báo cáo thống kê doanh thu tiêu thụ</span>
+                                </div>
+                                <div class="col-md-1 col-sm-12 col-12"
+                                    style="width:30px;">
+                                    <input
+                                        name="isRevenueControl"
+                                        type="checkbox"
+                                        id="isRevenueControl"
+                                        class="checkSendEMail form-check-input"
+                                        [(ngModel)]="_manageService.dataService.isRevenueControl">
+                                </div>
+                            </div> -->
+                            <div class="row mb-5 align-items-center">
+                                <div class="col-md-2 col-sm-12 col-12">
+                                    <label class="form-label">{{
+                                        'Định dạng tên file báo cáo doanh thu tiêu thụ' |
+                                        localize }} <span style="color: red;"> *</span></label>
+                                    
+                                </div>
+                                <div class="col-md-10 col-sm-12 col-12">
+                                    <input
+                                        [(ngModel)]="_manageService.dataService.fileNameRevenueControl"
+                                        id="fileNameRevenueControl"
+                                        #fileNameRevenueControl="ngModel"
+                                        required
+                                        class="form-control"
+                                        type="url"
+                                        name="fileNameRevenueControl"
+                                        placeholder="Định dạng tên file báo cáo" />
+                                    <validation-messages
+                                        [formCtrl]="fileNameRevenueControl"></validation-messages>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-20">
+                            <button
+                                [routerLink]="['/app/reconciliation/configureData/config-datasource']"
+                                type="button"
+                                class="btn btn-primary fw-bold"
+                                [disabled]="!serviceCreateForm.form.valid"
+                                >
+                                <span>{{ 'Về Bước trước' | localize }}</span>
+                            </button>
+                            <!-- <button
+                                (click)="cancel()"
+                                type="button"
+                                class="btn btn-light-primary fw-bold">
+                                <span>{{ 'Hủy bỏ' | localize }}</span>
+                            </button> -->
+                            <button
+                            *ngIf="'Pages.Administration.RevenueControl.Create' | permission"
+                                [buttonBusy]="_manageService.saving"
+                                type="button"
+                                (click)="complete()"
+                                [disabled]="!serviceCreateForm.form.valid"
+                                class="btn btn-success fw-bold">
+                                <i class="fa fa-save"></i>
+                                <span>{{ 'Lưu cấu hình' | localize }}</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

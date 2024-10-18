@@ -1,0 +1,239 @@
+<div
+    appBsModal
+    #createOrEditModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="createOrEditModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static', keyboard: !saving }">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #agencyForm="ngForm"
+                (ngSubmit)="save()" autocomplete="new-password">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="agency.agencyId">{{ 'Chỉnh sửa đại lý' |
+                            localize }}: {{ agency.agencyName }}</span>
+                        <span *ngIf="!agency.agencyId">{{ 'Tạo mới đại lý' |
+                            localize }}</span>
+                    </h4>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        (click)="close()"
+                        [disabled]="saving">
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="mb-5">
+                        <label class="form-label">{{ 'Mã đại lý' | localize }} <span style="color: red;">*</span></label>
+                        <input
+                            id="agencyCode" 
+                            #agencyCodeInput="ngModel" 
+                            class="form-control"
+                            type="text" 
+                            name="agencyCode" 
+                            [(ngModel)]="agency.agencyCode" 
+                            required
+                            maxlength="64" 
+                            pattern="^(?!\s*$).+"/>
+                            <div
+                            *ngIf="agencyForm?.controls?.agencyCode?.errors?.required && !agencyCodeInput.pristine">
+                            <span
+                                class="form-text text-danger text-left">{{
+                                'Trường này là bắt buộc' |
+                                localize }}</span>
+                            </div>
+                            <div
+                                *ngIf="agencyForm?.controls?.agencyCode?.errors?.pattern&& !agencyCodeInput.pristine">
+                                <span
+                                    class="form-text text-danger text-left">{{
+                                    'Ký tự không hợp lệ' |
+                                    localize
+                                    }}</span>
+                            </div>
+                    </div>
+
+                    <div class="mb-5">
+                        <label class="form-label">{{ 'Tên đại lý' |
+                            localize }} <span style="color: red;">*</span></label>
+                        <input
+                            id="agencyName"
+                            #agencyNameInput="ngModel"
+                            class="form-control"
+                            type="text"
+                            name="agencyName"
+                            pattern="^(?!\s*$).+"
+                            [(ngModel)]="agency.agencyName"
+                            required
+                            maxlength="100" 
+                            pattern="^(?!\s*$).+"/>
+                            <div
+                            *ngIf="agencyForm?.controls?.agencyName?.errors?.required && !agencyNameInput.pristine">
+                            <span
+                                class="form-text text-danger text-left">{{
+                                'Trường này là bắt buộc' |
+                                localize }}</span>
+                            </div>
+                            <div
+                                *ngIf="agencyForm?.controls?.agencyName?.errors?.pattern&& !agencyNameInput.pristine">
+                                <span
+                                    class="form-text text-danger text-left">{{
+                                    'Ký tự không hợp lệ' |
+                                    localize
+                                    }}</span>
+                            </div>
+                    </div>
+                    <div class="mb-5">
+                        <label class="form-label">{{ 'Tên công ty' | localize }}
+                            <span style="color: red;">*</span></label>
+                        <input
+                            id="CompanyName"
+                            #companyNameInput="ngModel"
+                            class="form-control"
+                            type="text"
+                            name="CompanyName"
+                            pattern="^(?!\s*$).+"
+                            [(ngModel)]="agency.companyName"
+                            required
+                            maxlength="100" 
+                            pattern="^(?!\s*$).+"/>
+                            <div
+                            *ngIf="agencyForm?.controls?.CompanyName?.errors?.required && !companyNameInput.pristine">
+                            <span
+                                class="form-text text-danger text-left">{{
+                                'Trường này là bắt buộc' |
+                                localize }}</span>
+                            </div>
+                            <div
+                                *ngIf="agencyForm?.controls?.CompanyName?.errors?.pattern&& !companyNameInput.pristine">
+                                <span
+                                    class="form-text text-danger text-left">{{
+                                    'Ký tự không hợp lệ' |
+                                    localize
+                                    }}</span>
+                            </div>
+                    </div>
+                    <div class="mb-5">
+                        <label class="form-label">{{ 'Email' | localize }} <span style="color: red;">*</span></label>
+                        <input
+                            id="Email"
+                            
+                            #emailInput="ngModel"
+                            class="form-control"
+                            type="email"
+                            name="Email"
+                            email
+                            [(ngModel)]="agency.email"
+                            required
+                            maxlength="64" 
+                            pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
+                            />
+                            <div
+                            *ngIf="agencyForm?.controls?.Email?.errors?.required && !emailInput.pristine">
+                            <span
+                                class="form-text text-danger text-left">{{
+                                'Trường này là bắt buộc' |
+                                localize }}</span>
+                            </div>
+                            <div
+                                *ngIf="agencyForm?.controls?.Email?.errors?.pattern && !emailInput.pristine">
+                                <span
+                                    class="form-text text-danger text-left">{{
+                                    'Email không hợp lệ' |
+                                    localize
+                                    }}</span>
+                            </div>
+                    </div>
+                    <div class="mb-5">
+                        <label class="form-label">{{ 'Link dữ liệu lấy báo cáo' | localize }}
+                            <span style="color: red;">*</span>
+                        </label>
+                        <input
+                            id="SFTPLink"
+                            #sFTPLinkInput="ngModel"
+                            class="form-control"
+                            type="url"
+                            name="SFTPLink"
+                            [(ngModel)]="agency.sFTPLink"
+                            required
+                            />
+                            <div
+                            *ngIf="agencyForm?.controls?.SFTPLink?.errors?.required && !sFTPLinkInput.pristine">
+                            <span
+                                class="form-text text-danger text-left">{{
+                                'Trường này là bắt buộc' |
+                                localize }}</span>
+                            </div>
+                            <!-- <div
+                                *ngIf="agencyForm?.controls?.SFTPLink?.errors?.pattern && !sFTPLinkInput.pristine">
+                                <span
+                                    class="form-text text-danger text-left">{{
+                                    'Link không hợp lệ' |
+                                    localize
+                                    }}</span>
+                            </div> -->
+                    </div>
+                    <div class="mb-5 row">
+                        <div class="col-md-6 col">
+                            <label class="form-label">{{ 'Tài khoản' | localize }}</label>
+                            <input
+                                id="sFTPLinkAccount"
+                                #sFTPLinkAccountInput="ngModel"
+                                class="form-control"
+                                type="text"
+                                name="sFTPLinkAccount"
+                                [(ngModel)]="agency.sFTPLinkAccount"                              
+                                maxlength="64" >
+                        </div>
+                        <div class="col-md-6 col">
+                            <label class="form-label">{{ 'Mật khẩu' | localize }}</label>
+                            <input
+                                id="sFTPLinkPassword"
+                                #sFTPLinkPasswordInput="ngModel"
+                                class="form-control"
+                                type="text"
+                                name="sFTPLinkPassword"
+                                [(ngModel)]="agency.sFTPLinkPassword"
+                                maxlength="64" >
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <label class="form-label">{{ 'Mô tả' | localize }}</label>
+                        <textarea
+                            id="Description"
+                            #descriptionInput="ngModel"
+                            class="form-control"
+                            type="text"
+                            name="Description"
+                            [(ngModel)]="agency.description"
+                            maxlength="300"
+                            ></textarea>
+                        <validation-messages [formCtrl]="descriptionInput"></validation-messages>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button
+                        [disabled]="saving"
+                        type="button"
+                        class="btn btn-light-primary fw-bold"
+                        (click)="close()">
+                        {{ 'Cancel' | localize }}
+                    </button>
+                    <button
+                        type="submit"
+                        class="btn btn-primary fw-bold"
+                        [buttonBusy]="saving"
+                        [disabled]="!agencyForm.form.valid"
+                        >
+                        <i class="fa fa-save"></i>
+                        <span>{{ 'Save' | localize }}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

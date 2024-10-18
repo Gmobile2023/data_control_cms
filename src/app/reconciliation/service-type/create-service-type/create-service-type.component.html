@@ -1,0 +1,143 @@
+<div
+    appBsModal
+    #createServiceTypeModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    [config]="{ backdrop: 'static', keyboard: !saving }"
+    aria-labelledby="createServiceTypeModal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #roleForm="ngForm"
+            (ngSubmit)="save()"
+            >
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="serviceType.id">{{ 'Chỉnh sửa loại dịch vụ' |
+                            localize }}: {{ serviceType.serviceTypeName }}</span>
+                        <span *ngIf="!serviceType.id">{{ 'Tạo mới loại dịch vụ' |
+                            localize }}</span>
+                    </h4>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        (click)="close()"
+                        [disabled]="saving">
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="mb-5">
+                        <label class="form-label">{{ 'Tên loại dịch vụ' |
+                            localize }} <span style="color: red;">*</span></label>
+                        <input
+                            id="serviceTypeName"
+                            #roleNameInput="ngModel"
+                            class="form-control"
+                            type="text"
+                            name="serviceTypeName"
+                            pattern="^(?!\s*$).+"
+                            [(ngModel)]="serviceType.serviceTypeName"
+                            required
+                            maxlength="64" 
+                            pattern="^(?!\s*$).+"/>
+                            <div
+                            *ngIf="roleForm?.controls?.serviceTypeName?.errors?.required && !roleNameInput.pristine">
+                            <span
+                                class="form-text text-danger text-left">{{
+                                'Trường này là bắt buộc' |
+                                localize }}</span>
+                            </div>
+                            <div
+                                *ngIf="roleForm?.controls?.serviceTypeName?.errors?.pattern&& !roleNameInput.pristine">
+                                <span
+                                    class="form-text text-danger text-left">{{
+                                    'Ký tự không hợp lệ' |
+                                    localize
+                                    }}</span>
+                            </div>
+                    </div>
+                    <div class="mb-5">
+                        <label class="form-label">{{ 'Mã loại dịch vụ' | localize }}
+                            <span style="color: red;">*</span></label>
+                        <input
+                            id="serviceTypeCode"
+                            #roleNameInput="ngModel"
+                            class="form-control"
+                            type="text"
+                            name="serviceTypeCode"
+                            pattern="^(?!\s*$).+"
+                            [(ngModel)]="serviceType.serviceTypeCode"
+                            required
+                            maxlength="64" 
+                            pattern="^(?!\s*$).+"/>
+                            <div
+                            *ngIf="roleForm?.controls?.serviceTypeCode?.errors?.required && !roleNameInput.pristine">
+                            <span
+                                class="form-text text-danger text-left">{{
+                                'Trường này là bắt buộc' |
+                                localize }}</span>
+                            </div>
+                            <div
+                                *ngIf="roleForm?.controls?.serviceTypeCode?.errors?.pattern&& !roleNameInput.pristine">
+                                <span
+                                    class="form-text text-danger text-left">{{
+                                    'Ký tự không hợp lệ' |
+                                    localize
+                                    }}</span>
+                            </div>
+                        
+                    </div>
+                    <div class="mb-5">
+                        <label class="form-label">{{ 'Mô tả' | localize }}</label>
+                        <input
+                            id="Description"
+                            #roleNameInput="ngModel"
+                            class="form-control"
+                            type="text"
+                            name="Description"
+                            [(ngModel)]="serviceType.description"
+                            maxlength="500" 
+                            pattern="^(?!\s*$).+"/>
+                            <div
+                            *ngIf="roleForm?.controls?.Description?.errors?.required && !roleNameInput.pristine">
+                            <span
+                                class="form-text text-danger text-left">{{
+                                'Trường này là bắt buộc' |
+                                localize }}</span>
+                            </div>
+                            <div
+                                *ngIf="roleForm?.controls?.Description?.errors?.pattern&& !roleNameInput.pristine">
+                                <span
+                                    class="form-text text-danger text-left">{{
+                                    'Ký tự không hợp lệ' |
+                                    localize
+                                    }}</span>
+                            </div>
+                        <!-- <validation-messages [formCtrl]="roleNameInput"></validation-messages> -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button
+                        [disabled]="saving"
+                        type="button"
+                        class="btn btn-light-primary fw-bold"
+                        (click)="close()"
+                        >
+                        {{ 'Cancel' | localize }}
+                    </button>
+                    <button
+                        type="submit"
+                        class="btn btn-primary fw-bold"
+                        [buttonBusy]="saving"
+                        [disabled]="!roleForm.form.valid"
+                        >
+                        <i class="fa fa-save"></i>
+                        <span>{{ 'Save' | localize }}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

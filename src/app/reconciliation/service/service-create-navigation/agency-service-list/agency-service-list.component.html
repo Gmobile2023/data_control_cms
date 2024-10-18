@@ -1,0 +1,142 @@
+<div [@routerTransition]>
+    <sub-header [title]="'Danh sách đại lý' | localize">
+        <div role="actions">
+            <button
+                class="btn btn-primary float-end"
+                (click)="createAgencyServiceModal.show()"
+                *ngIf="'Pages.Administration.Agency.Create' | permission"
+                class="btn btn-primary float-end"
+                >
+                <i class="fa fa-plus btn-md-icon"></i>
+                <span class="d-none d-md-inline-block">
+                    {{ 'Tạo mới' | localize }}
+                </span>
+            </button>
+        </div>
+    </sub-header>
+
+    <div [class]="containerClass">
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="primeng-datatable-container">
+                        <p-table [value]="_serviceService.agencies"
+                            [tableStyle]="{ 'min-width': '50rem' }">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Tên đại lý</th>
+                                    <th>Hành động sau đối soát</th>
+                                    <th class="status">Trạng thái</th>
+                                    <th
+                                        style="min-width: 130px"
+                                        [hidden]="
+                                            !(
+                                                [
+                                                    'Pages.Administration.Agency.Edit',
+                                                    'Pages.Administration.Agency.Delete'
+                                                ] | permissionAny
+                                            )
+                                        ">
+                                        {{ 'Actions' | localize }}
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-product let-rowIndex="rowIndex">
+                                <tr>
+                                    <td>{{ rowIndex + 1 }}</td>
+                                    <td>{{ product.agencyName }}</td>
+                                    <td>{{ product.actionList }}</td>
+                                    <td>{{ product.status }}</td>
+                                    <td
+                                        style="min-width: 130px"
+                                        [hidden]="
+                                        !(
+                                            [
+                                            'Pages.Administration.Agency.Edit',
+                                            'Pages.Administration.Agency.Delete'
+                                            ]
+                                        )
+                                    ">
+                                    <div class="btn-group" dropdown
+                                    placement="bottom left"
+                                    container="body">
+                                    <button
+                                        (click)="openCreateModal(product.id)"
+                                        type="button"
+                                        class="btn btn-primary btn-sm me-2">
+                                        {{ 'Chỉnh sửa' | localize }}
+                                    </button>
+                                    <button
+                                        id="dropdownButton"
+                                        type="button"
+                                        class="btn btn-primary btn-sm dropdown-toggle"
+                                        dropdownToggle
+                                        aria-controls="dropdownMenu">
+                                        <i class="fa fa-cog"></i>
+                                        <span class="caret"></span>
+                                        {{ 'Trạng thái' | localize }}
+                                    </button>
+                                    <ul
+                                        id="dropdownMenu"
+                                        class="dropdown-menu"
+                                        role="menu"
+                                        *dropdownMenu
+                                        aria-labelledby="dropdownButton">
+
+                                        <li
+                                        (click)="updateStatus(product.id, true)"
+                                            role="menuitem">
+                                            <a
+                                                
+                                                href="javascript:;"
+                                                class="dropdown-item">
+                                                {{ 'Hoạt động' | localize }}
+                                            </a>
+                                        </li>
+
+                                        <li
+                                        (click)="updateStatus(product.id, false)"
+                                            role="menuitem">
+                                            <a
+                                            
+                                                href="javascript:;"
+                                                class="dropdown-item">
+                                                {{ 'Không hoạt động' | localize }}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <div class="mt-4">
+                        <button
+                            (click)="complete()"
+                            type="button"
+                            class="btn btn-success fw-bold">
+                            <i class="fa fa-save"></i>
+                            <span>{{ 'Hoàn thành' | localize }}</span>
+                        </button>
+                        <button
+                            (click)="cancel()"
+                            type="button"
+                            class="btn btn-light-primary fw-bold">
+                            <span>{{ 'Hủy bỏ' | localize }}</span>
+                        </button>
+                        <button
+                            [routerLink]="['/app/reconciliation/service/service-create/supplier-list']"
+                            [queryParams]="{ serviceId: _serviceService.serviceId }"
+                            type="button"
+                            class="btn btn-primary fw-bold">
+                            <span>{{ 'Bước trước' | localize }}</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <agency-service-create #createAgencyServiceModal></agency-service-create>
+</div>
