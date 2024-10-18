@@ -40,39 +40,39 @@ jobs:
         file: ./Dockerfile
         builder: ${{ steps.buildx.outputs.name }}
         push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/zota:datacontrol
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/gmobile:datacontrol
         #cache-from: type=local,src=/tmp/.buildx-cache
         #cache-to: type=local,dest=/tmp/.buildx-cache 
         
     - name: Verify
       run: echo ${{ steps.docker_build_web.outputs.digest }}_web
 
-    - name: Establish VPN connection
-      run: |
-       sudo apt update
-       sudo apt install -y openvpn
-       echo "${{ secrets.VPN_CONFIG }}" > vpn-config.ovpn
-       nohup sudo openvpn --config vpn-config.ovpn &  
+    # - name: Establish VPN connection
+      # run: |
+       # sudo apt update
+       # sudo apt install -y openvpn
+       # echo "${{ secrets.VPN_CONFIG }}" > vpn-config.ovpn
+       # nohup sudo openvpn --config vpn-config.ovpn &  
 
-    - name: SSH Remote Commands
-      uses: appleboy/ssh-action@v1.0.0
-      with:
-        host: ${{ secrets.SANDBOX_SSH_HOST}}
-        username: ${{ secrets.SANDBOX_SSH_USERNAME }}
-        password: ${{ secrets.SANDBOX_SSH_PASSWORD }}
-        script: |
-          cd /home/docker/services/zota/data_control_web
-          echo "${{ secrets.SANDBOX_SSH_PASSWORD }}" | sudo -S bash deploy.sh
+    # - name: SSH Remote Commands
+      # uses: appleboy/ssh-action@v1.0.0
+      # with:
+        # host: ${{ secrets.SANDBOX_SSH_HOST}}
+        # username: ${{ secrets.SANDBOX_SSH_USERNAME }}
+        # password: ${{ secrets.SANDBOX_SSH_PASSWORD }}
+        # script: |
+          # cd /home/docker/services/zota/data_control_web
+          # echo "${{ secrets.SANDBOX_SSH_PASSWORD }}" | sudo -S bash deploy.sh
 
-  Ping-Slack:
-   if: always()
-   needs: build
-   runs-on: ubuntu-latest
-   steps:
-      - name: Ping Slack 🌲
-        uses: slackapi/slack-github-action@v1.24.0
-        with:
-          channel-id: '${{ secrets.SLACK_DEV_CHANNEL_ID  }}'
-          slack-message: "🚀---------------------🌲---------------------🚀\nDEPLOY SERVICE: ${{ github.event.repository.name }}\nENV: ${{ github.ref_name }}\nSTATUS: ${{ needs.build.result }}\nCOMMIT MESSAGE: ${{ github.event.commits[0].message }}\nAUTHOR: ${{ github.event.commits[0].author.name }}"
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}  
+  # Ping-Slack:
+   # if: always()
+   # needs: build
+   # runs-on: ubuntu-latest
+   # steps:
+      # - name: Ping Slack 🌲
+        # uses: slackapi/slack-github-action@v1.24.0
+        # with:
+          # channel-id: '${{ secrets.SLACK_DEV_CHANNEL_ID  }}'
+          # slack-message: "🚀---------------------🌲---------------------🚀\nDEPLOY SERVICE: ${{ github.event.repository.name }}\nENV: ${{ github.ref_name }}\nSTATUS: ${{ needs.build.result }}\nCOMMIT MESSAGE: ${{ github.event.commits[0].message }}\nAUTHOR: ${{ github.event.commits[0].author.name }}"
+        # env:
+          # SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}  
